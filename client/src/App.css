@@ -1,0 +1,24 @@
+.App {
+  text-align: center;
+}
+
+.home {
+  margin-top: 140px;
+}
+
+.home h1, h2 {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+
+.home h1 {
+  font-size: 60px;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
