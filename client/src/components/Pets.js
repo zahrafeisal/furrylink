@@ -1,0 +1,1 @@
+// displays pets available for adoption, with their info

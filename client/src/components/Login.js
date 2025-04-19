@@ -36,7 +36,8 @@ const LoginForm = () => {
                     type="email"  
                     onChange={formik.handleChange}  
                     onBlur={formik.handleBlur}  
-                    value={formik.values.email}  
+                    value={formik.values.email}
+                    size={30}
                 />  
                 {/* ensure valid email address */}
                 {formik.touched.email && formik.errors.email ? (  
@@ -51,14 +52,18 @@ const LoginForm = () => {
                     type="password"  
                     onChange={formik.handleChange}  
                     onBlur={formik.handleBlur}  
-                    value={formik.values.password}  
+                    value={formik.values.password} 
+                    size={30} 
                 />  
                 {/* ensure valid password */}
                 {formik.touched.password && formik.errors.password ? (  
                     <div style={{ color: 'red' }}>{formik.errors.password}</div>  
                 ) : null}  
             </div>  
-            <button type="submit">Log in</button>  
+            <input
+              type='submit'
+              value={'Log in'}
+            /> 
         </form>  
         </div>
     )

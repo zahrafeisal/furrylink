@@ -1,6 +1,7 @@
 import React from 'react';  
 import { useFormik } from 'formik';  
-import * as Yup from 'yup';  
+import * as Yup from 'yup';
+import "../App.css";
 
 const SignupForm = () => {
 
@@ -32,7 +33,7 @@ const SignupForm = () => {
         },
         validationSchema,
         onSubmit: values => {
-            console.log(values)
+            console.log(values);
             // API functionality
         }
     })
@@ -49,7 +50,8 @@ const SignupForm = () => {
                       name='firstName'
                       onChange={formik.handleChange}  
                       onBlur={formik.handleBlur}  
-                      value={formik.values.firstName}  
+                      value={formik.values.firstName}
+                      size={50}
                     />
                     {formik.touched.firstName && formik.errors.firstName ? (  
                         <div style={{ color: 'red' }}>{formik.errors.firstName}</div>  
@@ -63,7 +65,8 @@ const SignupForm = () => {
                       name='lastName'
                       onChange={formik.handleChange}  
                       onBlur={formik.handleBlur}  
-                      value={formik.values.lastName}  
+                      value={formik.values.lastName} 
+                      size={50} 
                     />
                     {formik.touched.lastName && formik.errors.lastName ? (  
                         <div style={{ color: 'red' }}>{formik.errors.lastName}</div>  
@@ -77,7 +80,8 @@ const SignupForm = () => {
                       name='email'
                       onChange={formik.handleChange}  
                       onBlur={formik.handleBlur}  
-                      value={formik.values.email}  
+                      value={formik.values.email} 
+                      size={50} 
                     />
                     {formik.touched.email && formik.errors.email ? (  
                         <div style={{ color: 'red' }}>{formik.errors.email}</div>  
@@ -91,7 +95,8 @@ const SignupForm = () => {
                       name='password'
                       onChange={formik.handleChange}  
                       onBlur={formik.handleBlur}  
-                      value={formik.values.password}  
+                      value={formik.values.password} 
+                      size={50}
                     />
                     {formik.touched.password && formik.errors.password ? (  
                         <div style={{ color: 'red' }}>{formik.errors.password}</div>  
@@ -106,12 +111,17 @@ const SignupForm = () => {
                       onChange={formik.handleChange}  
                       onBlur={formik.handleBlur}  
                       value={formik.values.confirmPassword}  
+                      size={50}
                     />
                     {formik.touched.confirmPassword && formik.errors.confirmPassword ? (  
                         <div style={{ color: 'red' }}>{formik.errors.confirmPassword}</div>  
                     ) : null}  
                 </div>
-                <button type="submit">Sign up</button> 
+                <input
+                  type='submit'
+                  value={'Sign up'}
+                  id='signUpSubmit'
+                /> 
             </form>
         </div>
     )
