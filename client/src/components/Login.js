@@ -18,9 +18,11 @@ const LoginForm = () => {
             password: ""
         },
         validationSchema,
-        onSubmit: values => {
+        onSubmit: (values, { resetForm }) => {
             console.log(values)
             // API functionality
+            // clear input fields
+            resetForm();    
         }
     });
 
@@ -61,6 +63,7 @@ const LoginForm = () => {
                 ) : null}  
             </div>  
             <input
+              id='loginSubmit'
               type='submit'
               value={'Log in'}
             /> 

@@ -36,6 +36,11 @@
 #signUpSubmit {
   margin-top: 25px;
   padding: 8px;
+  cursor: pointer;
+}
+
+#signUpSubmit:hover {
+  background-color: lightgray;
 }
 
 .loginPage {
@@ -55,6 +60,16 @@
   margin-top: 25px;
   margin-bottom: 10px;
   font-size: 18px;
+}
+
+#loginSubmit {
+  margin-top: 25px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+#loginSubmit:hover {
+  background-color: lightgray;
 }
 
 @keyframes App-logo-spin {

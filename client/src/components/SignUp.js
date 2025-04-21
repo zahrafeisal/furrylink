@@ -32,9 +32,11 @@ const SignupForm = () => {
             confirmPassword: ""
         },
         validationSchema,
-        onSubmit: values => {
+        onSubmit: (values, { resetForm }) => {
             console.log(values);
             // API functionality
+            // clear input fields 
+            resetForm();    
         }
     })
 
