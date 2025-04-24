@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import React from 'react';
 import * as Yup from "yup";
 
-const LoginForm = () => {
+const LoginForm = ({ onLogin }) => {
     const validationSchema = Yup.object({
         email: Yup.string()
             .email("Invalid email address")
@@ -21,8 +21,8 @@ const LoginForm = () => {
         onSubmit: (values, { resetForm }) => {
             console.log(values)
             // API functionality
-            // clear input fields
-            resetForm();    
+            // onLogin used here
+            resetForm();      // clear input fields
         }
     });
 

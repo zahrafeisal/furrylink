@@ -1,0 +1,2 @@
+# prevent secret key from being pushed to github
+.env 

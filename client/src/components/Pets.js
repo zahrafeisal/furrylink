@@ -1,4 +1,4 @@
-// displays pets available for adoption, with their info
+// displays individual pet info clicked for view from Home
 
 function Pets() {}
 
