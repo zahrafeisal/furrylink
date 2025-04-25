@@ -2,32 +2,67 @@
 
 from flask import request, make_response, jsonify, session
 from flask_restful import Resource
-from models import User, Pet, Review
+from models import User, Pet, Review, AdoptionApplication
 from config import app, db, api
 
 
 class Login(Resource):
-    def post(self):
-        user = User.query.filter(
-            User.email == request.get_json()['email']
-        ).first()
-        session['user_id'] = user.id
-        return user.to_dict()
-    # remember sessions & cookies management
+    def post(self):  
+        user_data = request.get_json()  
+        email = user_data['email'] 
+        password = user_data['password']
+
+        # Query the user by email  
+        user = User.query.filter(User.email == email).first()  
+        
+        if user:  
+            # Check if the password matches 
+            if user.authenticate(password):  
+                session['user_id'] = user.id  
+                response = make_response(  
+                    user.to_dict(),  
+                    200  
+                )  
+                return response  
+            else:  
+                # Password is incorrect  
+                response_body = {'message': 'Incorrect password.'}  
+                response = make_response(  
+                    response_body,  
+                    401
+                )  
+                return response  
+        else:  
+            # User does not exist  
+            response_body = {'message': 'User does not exist.'}  
+            response = make_response(  
+                response_body,  
+                404   
+            )  
+            return response  
 
 
 class CheckSession(Resource):
-    # checks if user is logged in on page refresh
+    # checks if user is logged in on refresh
     def get(self):
         user = User.query.filter(
             User.id == session.get('user_id')
         ).first()
         if user:
-            return user.to_dict()
+            response = make_response(
+                user.to_dict(),
+                200
+            )
+            return response
         else:
-            return {
-                'message': '401: Not Authorized'
-            }, 401
+            response_body = {
+                'message': 'Unauthorized'
+            }
+            response = make_response(
+                response_body,
+                401
+            )
+            return response
 
 
 class Logout(Resource):
@@ -46,27 +81,35 @@ class Logout(Resource):
 class Users(Resource):
     def post(self):
         # allow users to sign up
-        email = request.form.get('email')
-        existing_user = User.query.filter(User.email == email).first()
+        user_data = request.get_json()
+        email = user_data['email']
+        existing_user = User.query.filter(User.email == email).first()   # checks if user already exists
+
         if existing_user:
-            # make them log in, raise an error
-            pass
+            response_body = {
+                'message': 'User already exists.'
+            }
+            response = make_response(
+                response_body,
+                400
+            )
+            return response
         else:
             new_user = User(
-                first_name=request.form.get('firstName'),
-                last_name=request.form.get('lastName'),
+                first_name=user_data['firstName'],
+                last_name=user_data['lastName'],
                 email=email,
-                telephone=request.form.get('telephone'),
-                animal_shelter=request.form.get('animalShelter'),
-                organization_name=request.form.get('organizationName'),
-                _password_hash=request.form.get('password')
+                telephone=user_data['telephone'],
+                animal_shelter=user_data['animalShelter'],
+                organization_name=user_data['organizationName'],
             )
+
+            new_user.password_hash = user_data['password']  # set pass
             
             db.session.add(new_user)
             db.session.commit()
             
-            new_user_id = new_user.id
-            session['user_id'] = new_user_id    # log the user in automatically
+            session['user_id'] = new_user.id   # log the user in automatically
 
             response = make_response(
                 new_user.to_dict(),
@@ -83,9 +126,8 @@ class UserByID(Resource):
             User.id == user_id
         ).first()
 
-        user_dict = user.to_dict()
         response = make_response(
-            user_dict,
+            user.to_dict(),
             200
         )
         return response
@@ -115,8 +157,8 @@ class Pets(Resource):
             type=request.form.get(),
             breed=request.form.get(),
             age=request.form.get(),
+            price=request.form.get(),
             image_filename=request.form.get(),
-            adopted=request.form.get(),
             user_id=session.get('user_id')
         )
         
@@ -165,17 +207,29 @@ class Reviews(Resource):
             201
         )
         return response
+    
+
+class Adopt(Resource):
+    def get(self):
+        applications = []
+        
+        user_id = session.get('user_id')
+
+    def post(self):
+        new_application = AdoptionApplication()
+        pass
 
 
-api.add_resource(Login, '/login')
-api.add_resource(CheckSession, '/check_session')
-api.add_resource(Logout, '/logout')
-api.add_resource(Users, '/users')
+
+api.add_resource(Login, '/login')   # done
+api.add_resource(CheckSession, '/check_session')   # done
+api.add_resource(Logout, '/logout')   # done
+api.add_resource(Users, '/users')   # done
 api.add_resource(UserByID, '/user_profile')
 api.add_resource(Pets, '/pets')
 api.add_resource(PetByID, '/pet/<int:id>')
 api.add_resource(Reviews, '/reviews')
-
+api.add_resource(Adopt, '/application')
 
 
 if __name__ == '__main__':

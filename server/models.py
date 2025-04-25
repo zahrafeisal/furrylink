@@ -1,8 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property  
 from datetime import datetime  
 
-from config import db  
-
+from config import db, bcrypt
 
 class User(db.Model):  # one to many with Pet  
     __tablename__ = 'users'  
@@ -19,13 +18,19 @@ class User(db.Model):  # one to many with Pet
     pets_added = db.relationship('Pet') 
     applications = db.relationship('AdoptionApplication', back_populates='user')  
 
-    @hybrid_property  
-    def password_hash(self):  
-        return self._password_hash  
-    
-    @password_hash.setter  
-    def password_hash(self, password):  
-        self._password_hash = self.simple_hash(password)  
+    @hybrid_property
+    def password_hash(self):
+        return self._password_hash
+
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(
+            password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self._password_hash, password.encode('utf-8'))  
 
     def __repr__(self):  
         return f"<User {self.first_name} {self.last_name} - {self.organization_name}>"  
@@ -38,6 +43,7 @@ class Pet(db.Model):
     type = db.Column(db.String)
     breed = db.Column(db.String)
     age = db.Column(db.Integer)
+    price = db.Column(db.Integer)
     image_filename = db.Column(db.String)    # allow users to upload pet photo
     adopted = db.Column(db.Boolean, default=False)
 
@@ -61,9 +67,10 @@ class AdoptionApplication(db.Model):
     __tablename__ = 'adoption_applications'
 
     id = db.Column(db.Integer, primary_key=True)  
+    description= db.Column(db.String)     # describe why they would like to adopt the pet
     status = db.Column(db.String, default='Pending')  # Status of the application (e.g., Pending, Approved, Rejected)  
     created_at = db.Column(db.DateTime, default=datetime.now)  # Timestamp of when the application was created  
-    
+
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)  # Reference to the pet being applied for  
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Reference to the user applying  
 

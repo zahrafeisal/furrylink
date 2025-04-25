@@ -3,7 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';  
 import "../App.css";  
 
-const SignupForm = () => {  
+const SignupForm = ({ onSignUp }) => {  
+    
     const [isAnimalShelter, setIsAnimalShelter] = useState(false); // determine user type  
 
     const validationSchema = Yup.object({  
@@ -58,6 +59,28 @@ const SignupForm = () => {
             };  
             console.log(data);  
             // Send to your API database  
+            fetch("/users", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("User already exists.");
+                }
+            })
+            .then((user) => {
+                alert("Account created successfully!");
+                onSignUp(user);
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
             resetForm();  
         }  
     });  
