@@ -72,6 +72,23 @@
   background-color: lightgray;
 }
 
+.navbar {  
+  display: flex;  
+  justify-content: space-between;  
+  align-items: center;  
+  padding: 10px;  
+  background-color: #f0f0f0;  
+}  
+
+.navLogo {  
+  font-weight: bold;  
+}  
+
+.navLinks {  
+  display: flex;  
+  gap: 15px; 
+}  
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

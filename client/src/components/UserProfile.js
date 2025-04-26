@@ -1,7 +1,8 @@
 // allows users to view account information, former applications, pets put up for adoption
 import React from "react";
 
-function UserProfile() {
+function UserProfile({ user }) {
+    let userID = user.id
     // api functionality to fetch user info from app.db
 
     return (

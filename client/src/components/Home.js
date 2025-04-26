@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 // fetch & display pets(make each pet viewable and users can navigate back to this component)
 // have search bar at the top w filter for: pet types, shelters
 
-function Home() {
-    const [pets, setPets] = useState(null);
-
-    useEffect(() => {
-        fetch("/pets")
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-        })
-        .then((pets) => {
-            setPets(pets);
-        })
-    }, [])
+function Home({ pets }) {
+    const navigate = useNavigate();
     
     return (
         <div className="home">
-            <input />    {/* Search bar */}
+            {/* Search bar */}
+            <input
+              type="search"
+            />
+
             {/* iterate over each pet and create a div for each, when clicked direct to Pets comp */}
             {pets.forEach(pet => {
                 return (

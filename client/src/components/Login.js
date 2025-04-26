@@ -1,8 +1,11 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import * as Yup from "yup";
+import { useNavigate } from 'react-router';
 
 const LoginForm = ({ onLogin }) => {
+    const navigate = useNavigate();
+
     const validationSchema = Yup.object({
         email: Yup.string()
             .email("Invalid email address")
@@ -21,8 +24,28 @@ const LoginForm = ({ onLogin }) => {
         onSubmit: (values, { resetForm }) => {
             console.log(values)
             // API functionality
-            // onLogin used here
-            resetForm();      // clear input fields
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(values)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+            })
+            .then((user) => {   // onLogin used here   
+                alert("Log in successful!");
+                onLogin(user);    // set user in session
+                resetForm();   // clear input fields
+                navigate("/")    // navigate to Home 
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
         }
     });
 

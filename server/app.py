@@ -145,11 +145,21 @@ class Pets(Resource):
             pet_dict = pet.to_dict()
             pets.append(pet_dict)
 
-        response = make_response(
-            pets,
-            200
-        )
-        return response
+        if pets:
+            response = make_response(
+                pets,
+                200
+            )
+            return response
+        else :
+            response_body = {
+                "message": "404: No pets found"
+            }
+            response = make_response(
+                response_body,
+                404
+            )
+            return response
 
     def post(self):
         # add a pet for adoption
@@ -225,8 +235,8 @@ api.add_resource(Login, '/login')   # done
 api.add_resource(CheckSession, '/check_session')   # done
 api.add_resource(Logout, '/logout')   # done
 api.add_resource(Users, '/users')   # done
-api.add_resource(UserByID, '/user_profile')
-api.add_resource(Pets, '/pets')
+api.add_resource(UserByID, '/user/<int:id>')
+api.add_resource(Pets, '/pets')    # done
 api.add_resource(PetByID, '/pet/<int:id>')
 api.add_resource(Reviews, '/reviews')
 api.add_resource(Adopt, '/application')
