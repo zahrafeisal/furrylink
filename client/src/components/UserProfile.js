@@ -1,15 +1,151 @@
-// allows users to view account information, former applications, pets put up for adoption
-import React from "react";
+// WORKING!
 
-function UserProfile({ user }) {
-    let userID = user.id
-    // api functionality to fetch user info from app.db
+// allows users to view account information, former applications, pets put up for adoption
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+
+function UserProfile({ user, currentUserID, setUpdatedUser }) {
+    const navigate = useNavigate();
+    const [editMode, setEditMode] = useState(false);
+    const [userDetails, setUserDetails] = useState({
+        email: user.email,
+        telephone: user.telephone
+    })
+
+    useEffect(() => {  
+        setUserDetails({  
+            email: user.email,  
+            telephone: user.telephone  
+        });  
+    }, [user]); // Sync userDetails whenever user updates  
+    
+    let petsAdded = user.pets_added;
+    let applications = user.applications;
+
+
+    function handleEdit() {
+        if (user.id) {
+            setEditMode(true);    // ensure other users can't edit ur profile
+        }
+    }
+
+    function handleDeetsChange(e) {
+        const { name, value } = e.target;
+        setUserDetails((previousDeets) => ({
+            ...previousDeets,
+            [name]: value
+        }));
+    }
+
+    function handleDeetsSave() {
+        fetch(`/user/${user.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userDetails)
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then((updatedUser) => {
+            console.log(updatedUser);
+            setUpdatedUser(updatedUser);
+            setEditMode(false);
+        })
+        .catch((error) => {
+            alert(error.message)
+        })
+    }
+
+    function handlePetClick(id) {
+        navigate(`/pet/${id}`);    // navigate to pet component, useLocation needed
+    }
+
+    function handlePetAdopted(id) {
+        // remove from db
+        fetch(`/pet/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .catch((error) => {
+            alert(error.message)
+        })
+    }
+
+    function handleApplicationClick(id) {
+        navigate(`/application/${id}`)    // navigate to AppDeets component, useLocation needed
+    }
+
+    function handleLogOut() {
+        fetch("/logout", {
+            method: "DELETE"
+        })
+        .then((response) => {
+            if (response.ok) {
+                navigate("/")
+            }
+        })
+        .catch((error) => {
+            alert(error.message)
+        })
+    }
 
     return (
         <div>
-            {/* add click functionality to edit */}
-            <h1>{/* store name of user */}</h1>
-            <h2>{/* store email of user */}</h2>
+            <h1>{`Hello, ${userDetails.email}`}</h1>
+            {/* add click functionality to edit, dynamically turn p's to inputs */}
+            {editMode ? (
+                <>
+                  <input 
+                    type="email"
+                    name="email"
+                    value={userDetails.email}
+                    onChange={handleDeetsChange}
+                  />
+                   <button onClick={handleDeetsSave}>Save</button>  
+                   <button onClick={() => setEditMode(false)}>Cancel</button>
+                </>
+            ) : (
+                <>
+                  <p onClick={handleEdit}>{userDetails.email}</p>
+                </>
+            )}
+            {/* for each loop, create cards for each pet added by user, if any, clickable */}
+            {/* hv a delete button */}
+            <div>
+                {petsAdded && petsAdded.map((pet) => (
+                    <div key={pet.id}>
+                        <p>{}</p>
+                        <button onClick={() => handlePetClick(pet.id)}>View more</button>
+                        {user.id === currentUserID && (
+                            <>
+                              <button onClick={() => handlePetAdopted(pet.id)}>Adopted</button>
+                            </>
+                        )}
+                    </div>
+                ))}
+            </div>
+            {/* for each loop, display in list form applications made and status, if any */}
+            <ol>
+            {applications && applications.map((application) => (
+                <li
+                  onClick={() => handleApplicationClick(application.id)}
+                >
+                    {application.pet.breed}
+                </li>
+            ))}
+            </ol>
+            <button onClick={handleLogOut}>Log out</button>
         </div>
     )
 }

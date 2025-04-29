@@ -1,9 +1,10 @@
 from sqlalchemy.ext.hybrid import hybrid_property  
+from sqlalchemy_serializer import SerializerMixin
 from datetime import datetime  
 
 from config import db, bcrypt
 
-class User(db.Model):  # one to many with Pet  
+class User(db.Model, SerializerMixin):  # one to many with Pet  
     __tablename__ = 'users'  
 
     id = db.Column(db.Integer, primary_key=True)  
@@ -14,9 +15,24 @@ class User(db.Model):  # one to many with Pet
     animal_shelter = db.Column(db.Boolean, default=False)  # Determine if user is a shelter or just an individual  
     organization_name = db.Column(db.String, nullable=True)  # New field for animal shelters  
     _password_hash = db.Column(db.String, nullable=False)  
-
-    pets_added = db.relationship('Pet') 
+    
+    # Relationships  
+    pets_added = db.relationship('Pet', back_populates='user') 
     applications = db.relationship('AdoptionApplication', back_populates='user')  
+    reviews = db.relationship('Review', back_populates='user')
+
+    serialize_rules = ('-pets_added.user', '-applications.user', '-reviews.user',)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email,
+            'telephone': self.telephone,
+            'animal_shelter': self.animal_shelter,
+            'organization_name': self.organization_name,
+        }
 
     @hybrid_property
     def password_hash(self):
@@ -36,31 +52,59 @@ class User(db.Model):  # one to many with Pet
         return f"<User {self.first_name} {self.last_name} - {self.organization_name}>"  
 
 
-class Pet(db.Model): 
+class Pet(db.Model, SerializerMixin): 
     __tablename__ = 'pets'
 
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String)
     breed = db.Column(db.String)
-    age = db.Column(db.Integer)
-    price = db.Column(db.Integer)
+    age = db.Column(db.String)
+    price = db.Column(db.String)
     image_filename = db.Column(db.String)    # allow users to upload pet photo
-    adopted = db.Column(db.Boolean, default=False)
-
+    
     # foreign keys for user
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    
+    # Relationships  
+    user = db.relationship('User', back_populates='pets_added')
+    applications = db.relationship('AdoptionApplication', back_populates='pet')
 
-    user = db.relationship('User', back_populates='pets')
-    applications = db.relationship('AdoptionApplication', back_populates='pet') 
+    serialize_rules = ('-user.pets_added', '-applications.pet',)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'type': self.type,
+            'breed': self.breed,
+            'age': self.age,
+            'price': self.price,
+            'image_filename': self.image_filename,
+            'user_id': self.user_id,
+            'user': self.user.to_dict()
+        } 
 
 
-class Review(db.Model):    # one to many rlship w user
+class Review(db.Model, SerializerMixin):    # one to many rlship w user
     __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.now)
     comment = db.Column(db.String)
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))    # foreign key for user
+
+    # Relationships  
+    user = db.relationship('User', back_populates='reviews')
+    serialize_rules = ('-user.reviews',)
+
+    def to_dict(self):
+        return {
+            'id':self.id,
+            'date': self.date,
+            'comment': self.comment,
+            'user_id': self.user_id,
+            'user': self.user.to_dict()
+        }
 
 
 class AdoptionApplication(db.Model):

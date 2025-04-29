@@ -1,21 +1,23 @@
 import './App.css';
+import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import LoginForm from './components/Login';
 import SignupForm from './components/SignUp';
 import LandingPage from './components/LandingPage';
 import UserProfile from './components/UserProfile';
 import Pet from './components/Pet';
-import ReviewForm from './components/Review';
-import AdoptionApplication from './components/AdoptionApplication';
-import Settings from './components/Settings';
+import ReviewForm from './components/ReviewForm';
+import Reviews from './components/Reviews';
+import ApplicationForm from './components/ApplicationForm';
+import ApplicationDetails from './components/ApplicationDetails';
+import AddPet from './components/AddPet';
 import Navbar from './components/Navbar';
-import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
 function App() {
     const [currentUser, setCurrentUser] = useState(null);
-    const [pets, setPets] = useState(null);
+    const [pets, setPets] = useState([]);
 
     useEffect(() => {     // check if user is logged in to determine whether Home or LandingPage is rendered
         fetch("/check_session")
@@ -23,9 +25,11 @@ function App() {
             if (response.ok) {
                 return response.json();
             }
+            throw new Error('Failed to check session'); 
         })
         .then((user) => {
             setCurrentUser(user);
+            console.log(user);
         })
         .catch((error) => {
             console.log(error.message);
@@ -47,21 +51,23 @@ function App() {
         })
     }, []);
 
+    if (!currentUser) {
+        <Navigate to={"/"}/>
+    }
+
 
     return (
         <Router>
-            {/* render navbar only when user is logged in */}
             {currentUser && <Navbar user={currentUser} />}
             <Routes>
-                <Route path='/' element={currentUser ? <Home pets={pets} /> : <LandingPage />} /> {/* conditional for session */}
-                <Route path='/home' element={<Home pets={pets} />} />   {/* explicit render for navbar */}
-                <Route path='/login' element={<LoginForm onLogin={setCurrentUser} />} />
-                <Route path='/users' element={<SignupForm onSignUp={setCurrentUser} />} />
-                <Route path='/user/:id' element={<UserProfile user={currentUser} />} />
-                <Route path='/pet/:id' element={<Pet />} />
-                <Route path='/reviews' element={<ReviewForm />} />
-                <Route path='/application' element={<AdoptionApplication />} />
-                <Route path='/settings' element={<Settings user={currentUser}/>} />
+                <Route path='/' element={<LandingPage />}/>
+                <Route path='/login' element={<LoginForm onLogin={setCurrentUser}/>}/>
+                <Route path='/home' element={<Home pets={pets}/>}/>
+                <Route path='/user/:id' element={<UserProfile user={currentUser} setUpdatedUser={setCurrentUser}/>}/>
+                <Route path='/users' element={<SignupForm onSignUp={setCurrentUser}/>}/>
+                <Route path='/pets' element={<AddPet user={currentUser}/>} />
+                <Route path='/reviews' element={<ReviewForm user={currentUser}/>}/>
+                <Route path='/pet/:id' element={<Pet />}/>
             </Routes>
         </Router>
     )

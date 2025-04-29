@@ -1,9 +1,13 @@
+// WORKING!
+
 import React, { useState } from 'react';  
 import { useFormik } from 'formik';  
 import * as Yup from 'yup';  
 import "../App.css";  
+import { useNavigate } from 'react-router';
 
-const SignupForm = ({ onSignUp }) => {  
+const SignupForm = ({ onSignUp }) => { 
+    const navigate = useNavigate();
     
     const [isAnimalShelter, setIsAnimalShelter] = useState(false); // determine user type  
 
@@ -69,13 +73,14 @@ const SignupForm = ({ onSignUp }) => {
             })
             .then((response) => {
                 if (response.ok) {
+                    alert("Account created successfully!");
+                    navigate("/home");
                     return response.json();
                 } else {
-                    throw new Error("User already exists.");
+                    alert("User already exists.");
                 }
             })
             .then((user) => {
-                alert("Account created successfully!");
                 onSignUp(user);
             })
             .catch((error) => {

@@ -14,6 +14,9 @@ app.secret_key = os.getenv('SECRET_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'   # configure a database connection to the local file app.db
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False    # disable modification tracking to use less memory
+app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')  
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limit file size to 16 MB  
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  
 app.json.compact = False
 
 metadata = MetaData(naming_convention={

@@ -11,6 +11,8 @@ flask-migrate = "*"
 flask-restful = "*"
 python-dotenv = "*"
 flask-bcrypt = "*"
+honcho = "*"
+sqlalchemy-serializer = "*"
 
 [dev-packages]
 

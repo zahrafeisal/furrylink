@@ -1,3 +1,5 @@
+// WORKING!
+
 import { useFormik } from 'formik';
 import React from 'react';
 import * as Yup from "yup";
@@ -34,14 +36,16 @@ const LoginForm = ({ onLogin }) => {
             })
             .then((response) => {
                 if (response.ok) {
+                    resetForm();   // clear input fields
+                    alert("Log in successful!");
+                    navigate("/home")    // navigate to Home
                     return response.json();
+                } else {
+                    alert("Incorrect username or password.")
                 }
             })
             .then((user) => {   // onLogin used here   
-                alert("Log in successful!");
-                onLogin(user);    // set user in session
-                resetForm();   // clear input fields
-                navigate("/")    // navigate to Home 
+                onLogin(user);    // set user in session 
             })
             .catch((error) => {
                 alert(error.message)

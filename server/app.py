@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
-from flask import request, make_response, jsonify, session
+import os
+from flask import request, make_response, session, send_from_directory
 from flask_restful import Resource
+from werkzeug.utils import secure_filename  
+from werkzeug.exceptions import BadRequest  
 from models import User, Pet, Review, AdoptionApplication
 from config import app, db, api
 
@@ -44,33 +47,33 @@ class Login(Resource):
 
 class CheckSession(Resource):
     # checks if user is logged in on refresh
-    def get(self):
-        user = User.query.filter(
-            User.id == session.get('user_id')
-        ).first()
-        if user:
-            response = make_response(
-                user.to_dict(),
-                200
-            )
-            return response
-        else:
-            response_body = {
-                'message': 'Unauthorized'
-            }
-            response = make_response(
-                response_body,
-                401
-            )
-            return response
+    def get(self):  
+        user_id = session.get('user_id')  
+        if user_id:  # First, check if user_id exists in the session  
+            user = User.query.filter(User.id == user_id).first()  
+            if user:  
+                response = make_response(user.to_dict(), 200)  # This will work now  
+                return response  
+
+        # If we fail to find the user or no user_id is set  
+        response_body = {'message': 'User unauthorized.'}  
+        response = make_response(response_body, 401)  
+        return response  
 
 
 class Logout(Resource):
     # delete cookie
     def delete(self):
+        if 'user_id' not in session:
+            response = make_response(
+                {"message": "User not authorized."},
+                401
+            )
+            return response
+        
         session['user_id'] = None      # reset user id to none
         
-        response_body = {'message': '204: No Content'}
+        response_body = {'message': 'Logout successful.'}
         response = make_response(
             response_body,
             204
@@ -119,12 +122,47 @@ class Users(Resource):
 
 
 class UserByID(Resource):
-    def get(self):
-        # allow users to view their profile
-        user_id = session.get('user_id')
+    def get(self, id):   # already being done by checksession tho 
+        # allow users to view others' profile
         user = User.query.filter(
-            User.id == user_id
+            User.id == id
         ).first()
+
+        if user:
+            response = make_response(
+                user.to_dict(),
+                200
+            )
+            return response
+        else:
+            response_body = {
+                "message": "User not found."
+            }
+            response = make_response(
+                response_body,
+                404
+            )
+            return response
+
+    def patch(self, id):    # edit email and/or name
+        user_data = request.get_json()
+        user = User.query.filter(User.id == id).first()
+        session['user_id'] = user.id
+
+        if not user:
+            response = make_response(
+                {
+                    "message": "User not found."
+                },
+                404
+            )
+            return response
+
+        for attr, value in user_data.items():
+            setattr(user, attr, value)
+
+        db.session.add(user)
+        db.session.commit()
 
         response = make_response(
             user.to_dict(),
@@ -132,17 +170,16 @@ class UserByID(Resource):
         )
         return response
 
-    def put(self):
-        # edit email and/or name
-        pass
-
-
+        
 class Pets(Resource):
     def get(self):
         # view all pets
-        pets = []
+        pets = []  
+        base_url = "/uploads/"
+
         for pet in Pet.query.all():
             pet_dict = pet.to_dict()
+            pet_dict['image_filename'] = base_url + pet_dict['image_filename']  # Ensure full path is set  
             pets.append(pet_dict)
 
         if pets:
@@ -153,7 +190,7 @@ class Pets(Resource):
             return response
         else :
             response_body = {
-                "message": "404: No pets found"
+                "message": "No pets found."
             }
             response = make_response(
                 response_body,
@@ -162,31 +199,91 @@ class Pets(Resource):
             return response
 
     def post(self):
-        # add a pet for adoption
-        new_pet = Pet(
-            type=request.form.get(),
-            breed=request.form.get(),
-            age=request.form.get(),
-            price=request.form.get(),
-            image_filename=request.form.get(),
-            user_id=session.get('user_id')
-        )
+        # Allowed file extension function  
+        def allowed_file(filename):  
+            return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']  
         
-        db.session.add(new_pet)
-        db.session.commit()
+        if 'user_id' not in session:  
+            return make_response({'message': 'Unauthorized'}, 401)  
+        
+        print("Form Data:", request.form)  # Log form data  
+    
+        animal_type = request.form.get('animalType')  # Use get() safely  
+        breed = request.form.get('breed')  
+        age = request.form.get('age')  
+        price = request.form.get('price')  
+
+        # add a pet for adoption
+        new_pet = Pet(  
+            type=animal_type,
+            breed=breed,
+            age=age,
+            price=price,  
+            user_id=session.get('user_id')
+        )  
+
+        # Handle file upload  
+        if 'image_filename' not in request.files:  
+            raise BadRequest("No file part")  
+
+        image_file = request.files['image_filename']  
+
+        # Check if no file was submitted  
+        if image_file.filename == '':  
+            raise BadRequest("No file selected")  
+
+        # Check if the file is allowed  
+        if image_file and allowed_file(image_file.filename):  
+            filename = secure_filename(image_file.filename)  
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))  
+            # new_pet.image_filename = f"/uploads/{filename}" 
+            new_pet.image_filename = filename
+        else:  
+            raise BadRequest("File type not allowed")  
+
+        # Save new pet to the database  
+        db.session.add(new_pet)  
+        db.session.commit()  
 
         response = make_response(
             new_pet.to_dict(),
             201
         )
         return response
+    
+
+class UploadImages(Resource):
+    def get(self, filename):
+        return send_from_directory('uploads', filename)
 
 
-class PetByID(Resource):
+class PetByID(Resource):   # i dont think i need this but idk
     def get(self, id):
-        # allow users to view preferred pet
+        # allow users to view preferred pet (VIEW MORE button) , or search for pet
         pass
 
+    def delete(self, id):  # allow users to delete pets they put up for adoption, WHEN ADOPTED (ADOPTED button)
+        deleted_pet = Pet.query.filter(Pet.id == id).first()
+
+        if not deleted_pet:
+            response = make_response(
+                {
+                    "message": "No pet found."
+                },
+                404
+            )
+            return response
+
+        db.session.remove(deleted_pet)
+        db.session.commit()
+
+        response = make_response(
+            {
+                "message": "Pet deleted successfully!"
+            }
+        )
+        return response
+        
 
 class Reviews(Resource):
     def get(self):
@@ -196,6 +293,15 @@ class Reviews(Resource):
         for review in Review.query.all():
             review_dict = review.to_dict()
             reviews.append(review_dict)
+
+        if not reviews:
+            response = make_response(
+                {
+                    "message": "No reviews found."
+                },
+                404
+            )
+            return response
         
         response = make_response(
             reviews,
@@ -203,10 +309,20 @@ class Reviews(Resource):
         )
         return response
 
-    def post(self):
-        # allow users to post a review
+    def post(self):    # allow users to post a review
+        if 'user_id' not in session:
+            response = make_response(
+                {
+                    "message": "User not authorized."
+                },
+                401
+            )
+            return response
+        
+        reviewData = request.get_json()
         new_review = Review(
-            comment=''
+            comment=reviewData['comment'],
+            user_id=session['user_id']
         )
 
         db.session.add(new_review)
@@ -220,10 +336,6 @@ class Reviews(Resource):
     
 
 class Adopt(Resource):
-    def get(self):
-        applications = []
-        
-        user_id = session.get('user_id')
 
     def post(self):
         new_application = AdoptionApplication()
@@ -235,10 +347,11 @@ api.add_resource(Login, '/login')   # done
 api.add_resource(CheckSession, '/check_session')   # done
 api.add_resource(Logout, '/logout')   # done
 api.add_resource(Users, '/users')   # done
-api.add_resource(UserByID, '/user/<int:id>')
+api.add_resource(UserByID, '/user/<int:id>')    # for search bar  # done
 api.add_resource(Pets, '/pets')    # done
-api.add_resource(PetByID, '/pet/<int:id>')
-api.add_resource(Reviews, '/reviews')
+api.add_resource(UploadImages, '/uploads/<path:filename>')
+api.add_resource(PetByID, '/pet/<int:id>') 
+api.add_resource(Reviews, '/reviews')  # done
 api.add_resource(Adopt, '/application')
 
 

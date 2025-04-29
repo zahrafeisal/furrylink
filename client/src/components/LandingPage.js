@@ -1,7 +1,8 @@
-// done
+// WORKING!
 
 import React from "react";
 import { Link, useNavigate } from "react-router";
+import Reviews from "./Reviews";
 
 function LandingPage() {
 
@@ -19,8 +20,9 @@ function LandingPage() {
             {/* log in button links to log in page */}
             <button onClick={handleLogInClick}>Log in</button>
             <p>Don't have an account?</p>
-            <Link to="/users">Sign up</Link>
+            <Link to={"/users"}>Sign up</Link>
             {/* add links to components */}
+            <Reviews />
         </div>
     );
 }

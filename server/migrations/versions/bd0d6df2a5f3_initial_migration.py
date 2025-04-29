@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 7626f82f9a7a
+Revision ID: bd0d6df2a5f3
 Revises: 
-Create Date: 2025-04-24 04:00:26.098520
+Create Date: 2025-04-28 17:38:40.996842
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7626f82f9a7a'
+revision = 'bd0d6df2a5f3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,9 +35,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('type', sa.String(), nullable=True),
     sa.Column('breed', sa.String(), nullable=True),
-    sa.Column('age', sa.Integer(), nullable=True),
+    sa.Column('age', sa.String(), nullable=True),
+    sa.Column('price', sa.String(), nullable=True),
     sa.Column('image_filename', sa.String(), nullable=True),
-    sa.Column('adopted', sa.Boolean(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_pets_user_id_users')),
     sa.PrimaryKeyConstraint('id')
@@ -52,6 +52,7 @@ def upgrade():
     )
     op.create_table('adoption_applications',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('description', sa.String(), nullable=True),
     sa.Column('status', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('pet_id', sa.Integer(), nullable=False),
