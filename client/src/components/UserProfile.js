@@ -1,28 +1,30 @@
 // WORKING!
 
-// allows users to view account information, former applications, pets put up for adoption
+// allows users to view account information
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-function UserProfile({ user, currentUserID, setUpdatedUser, fetchUser }) {
+function UserProfile({ user, setUpdatedUser, fetchUser }) {
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
+    const petsAdded = user.pets_added;
     const [userDetails, setUserDetails] = useState({
+        firstName: user.first_name,
+        lastName: user.last_name,
         email: user.email,
         telephone: user.telephone
     })
 
     useEffect(() => {  
         setUserDetails({  
+            firstName: user.first_name,
+            lastName: user.last_name,
             email: user.email,  
             telephone: user.telephone  
         });  
     }, [user]); // Sync userDetails whenever user updates  
     
-    let petsAdded = user.pets_added;
-    let applications = user.applications;
-
-
     function handleEdit() {
         if (user.id) {
             setEditMode(true);    // ensure other users can't edit ur profile
@@ -62,7 +64,7 @@ function UserProfile({ user, currentUserID, setUpdatedUser, fetchUser }) {
     }
 
     function handlePetClick(id) {
-        navigate(`/pet/${id}`);    // navigate to pet component, useLocation needed
+        navigate(`/pet/${id}`);    // navigate to pet component or edit pet info but idk yet tho i'll see
     }
 
     function handlePetAdopted(id) {
@@ -75,16 +77,13 @@ function UserProfile({ user, currentUserID, setUpdatedUser, fetchUser }) {
         })
         .then((response) => {
             if (response.ok) {
+                alert("Pet deleted successfully")
                 return response.json();
             }
         })
         .catch((error) => {
             alert(error.message)
         })
-    }
-
-    function handleApplicationClick(id) {
-        navigate(`/application/${id}`)    // navigate to AppDeets component, useLocation needed, to view individual components
     }
 
     function handleLogOut() {
@@ -101,29 +100,40 @@ function UserProfile({ user, currentUserID, setUpdatedUser, fetchUser }) {
         })
     }
 
-    function handleStatusChange(applicationId, newStatus) {  
-        fetch(`/application/${applicationId}`, {  
-          method: 'PATCH',  
-          headers: {  
-            'Content-Type': 'application/json'  
-          },  
-          body: JSON.stringify({ status: newStatus })  
-        })  
-        .then(res => res.json())  
-        .then(updatedApplication => {  
-          // update state or refetch applications  
-          // e.g., setApplications(prev => prev.map(app => app.id === updatedApplication.id ? updatedApplication : app))  
-        });  
-    }  
-
     return (
         <div>
             <h1>{`Hello, ${userDetails.email}`}</h1>
             {/* add click functionality to edit, dynamically turn p's to inputs */}
             {editMode ? (
                 <>
+                  <label htmlFor="firstName">First name</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={userDetails.firstName}
+                    readOnly
+                  />
+                  <label htmlFor="lastName">Last name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={userDetails.lastName}
+                    readOnly
+                  />
+                  <label htmlFor="telephone">Phone Number</label>
+                  <input
+                    type="tel"
+                    id="telephone"
+                    name="telephone"
+                    value={userDetails.telephone}
+                    onChange={handleDeetsChange}
+                  />
+                  <label htmlFor="email">Email Address</label>
                   <input 
                     type="email"
+                    id="email"
                     name="email"
                     value={userDetails.email}
                     onChange={handleDeetsChange}
@@ -137,40 +147,17 @@ function UserProfile({ user, currentUserID, setUpdatedUser, fetchUser }) {
                 </>
             )}
             {/* for each loop, create cards for each pet added by user, if any, clickable */}
-            {/* hv a delete button */}
             <div>
                 {petsAdded && petsAdded.map((pet) => (
                     <div key={pet.id}>
-                        <p>{}</p>
+                        <img src={"/uploads/" + pet.image_filename} alt={pet.breed} />
+                        <p>{pet.type}</p>
+                        <p>{pet.breed}</p>
                         <button onClick={() => handlePetClick(pet.id)}>View more</button>
                         <button onClick={() => handlePetAdopted(pet.id)}>Adopted</button>
                     </div>
                 ))}
             </div>
-            {/* for each loop, display in list form applications made and status, if any */}
-            {applications && applications.map((app) => (
-                <div key={app.id} style={{border: '1px solid black', margin: '10px', padding: '10px'}}>
-                    {/* show applicant info */}
-                    <p>Name: {app.user.first_name} {app.user.last_name}</p>  
-                    <p>Description: {app.description}</p>  
-                    <p>Status: {app.status}</p>  
-                    {/* Show buttons only if current user owns the pet */}  
-                    {app.pet.user_id === currentUserID && (  
-                        <>  
-                        {app.status !== 'Approved' && (  
-                            <button onClick={() => handleStatusChange(app.id, 'Approved')}>  
-                              Approve  
-                            </button>  
-                        )}  
-                        {app.status !== 'Rejected' && (  
-                            <button onClick={() => handleStatusChange(app.id, 'Rejected')}>  
-                              Reject  
-                            </button>  
-                        )}  
-                        </>  
-                    )}  
-                </div>  
-            ))}
             <button onClick={handleLogOut}>Log out</button>
         </div>
     )

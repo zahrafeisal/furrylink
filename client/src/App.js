@@ -10,9 +10,12 @@ import Pet from './components/Pet';
 import ReviewForm from './components/ReviewForm';
 import Reviews from './components/Reviews';
 import ApplicationForm from './components/ApplicationForm';
-import ApplicationDetails from './components/ApplicationDetails';
 import AddPet from './components/AddPet';
 import Navbar from './components/Navbar';
+import ApplicationsReceived from './components/ApplicationsReceived';
+import ApplicationsSent from './components/ApplicationsSent';
+import AppRcvdDetails from './components/AppRcvdDetails';
+import AppSentDetails from './components/AppSentDetails';
 
 
 // Protected route component, prevent unauthorized users from accessing
@@ -28,15 +31,19 @@ function App() {
     // Function to fetch the latest user data  
     const fetchCurrentUser = () => {  
         fetch("/check_session")  
-        .then(res => {  
-            if (res.ok) return res.json();  
-            throw new Error('Failed to fetch user session');  
+        .then((response) => {  
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw new Error("No user logged in")
+            }
         })  
-        .then(user => {  
+        .then((user) => {  
+            console.log(user);
             setCurrentUser(user);  
         })  
-        .catch(err => {  
-            console.log(err.message);  
+        .catch((error) => {  
+            console.log(error.message);  
         });  
     };  
     
@@ -72,16 +79,51 @@ function App() {
                 <Route path='/home' element={<Home pets={pets}/>}/>
                 
                 {/* Protected routes */}
-                <Route path='/user/:id' element={<UserProfile
-                    user={currentUser}
-                    setUpdatedUser={setCurrentUser}
-                    fetchUser={fetchCurrentUser}
-                    />}
+                <Route path='/user/:id'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <UserProfile user={currentUser} setUpdatedUser={setCurrentUser} fetchUser={fetchCurrentUser}/>
+                  </PrivateRoute>}
                 />
-                <Route path='/pets' element={<AddPet user={currentUser}/>}/>
-                <Route path='/reviews' element={<ReviewForm user={currentUser}/>}/>
-                <Route path='/pet/:id' element={<Pet />}/>
-                <Route path='/application' element={<ApplicationForm currentUser={currentUser}/>}/>
+                <Route path='/pets'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <AddPet user={currentUser}/>
+                  </PrivateRoute>}
+                />
+                <Route path='/reviews' 
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <ReviewForm user={currentUser}/>
+                  </PrivateRoute>}
+                />
+                <Route path='/pet/:id'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <Pet />
+                  </PrivateRoute>}
+                />
+                <Route path='/application'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <ApplicationForm currentUser={currentUser}/>
+                  </PrivateRoute>}
+                />
+                <Route path='/pet-applications'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <ApplicationsReceived user={currentUser}/>
+                  </PrivateRoute>}
+                />
+                <Route path='/sent-applications'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <ApplicationsSent currentUser={currentUser}/>
+                  </PrivateRoute>}
+                />
+                <Route path='/pet-application/:id'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <AppRcvdDetails/>
+                  </PrivateRoute>}
+                />
+                <Route path='/sent-application/:id'
+                  element={<PrivateRoute currentUser={currentUser}>
+                    <AppSentDetails/>
+                  </PrivateRoute>}
+                />
             </Routes>
         </Router>
     )

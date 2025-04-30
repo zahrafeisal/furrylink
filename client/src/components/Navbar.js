@@ -20,6 +20,8 @@ function Navbar({ user }) {
                     <NavLink to={"/home"}>Home</NavLink>      {/* link to Home */}
                     <NavLink to={`/user/${user.id}`}>Profile</NavLink>      {/* link to UserProfile */}
                     <NavLink to={"/reviews"}>Reviews</NavLink>      {/* link to Review */}
+                    <NavLink to={"/pet-applications"}>Received Applications</NavLink>
+                    <NavLink to={"/sent-applications"}>Sent Applications</NavLink>
                 </div>
             </nav>
         )

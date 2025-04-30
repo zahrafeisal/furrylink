@@ -22,13 +22,17 @@ function Reviews() {
 
     return (
         <div>
-            {reviews && reviews.map(review => (
-                <div key={review.id}>
-                    <p>{review.user.email}</p>
-                    <p>{review.date}</p>
-                    <p>{review.comment}</p>
-                </div>
-            ))}
+            {reviews.length === 0 ? (
+                <p>No reviews yet :/</p>
+            ) : (
+                reviews.map(review => (
+                    <div key={review.id}>
+                        <p>{review.user.email}</p>
+                        <p>{review.date}</p>
+                        <p>{review.comment}</p>
+                    </div>
+                ))
+            )}
         </div>
     );
 }

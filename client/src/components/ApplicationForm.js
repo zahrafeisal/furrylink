@@ -1,16 +1,9 @@
-// application form goes here
-// from 'apply for adoption' button when an individual pet is clicked
-
 import React from "react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useFormik } from 'formik';  
 import * as Yup from 'yup';  
 
-
-// inputs : User email => readOnly 
-//          Pet details => readOnly 
-//          Desrcription (why you want to adopt)  *only send this to backend*
 
 const ApplicationForm = ({ currentUser }) => {
     const navigate = useNavigate();
@@ -38,7 +31,30 @@ const ApplicationForm = ({ currentUser }) => {
         },
         validationSchema,
         onSubmit: (values, { resetForm }) => {
-            console.log(values)
+            console.log(values.description)
+            const data = {
+                description: values.description,
+                petID: pet?.id
+            }
+
+            fetch("/applications", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    throw new Error("Problem posting application")
+                }
+            })
+            .then((application) => {
+                console.log(application)
+            })
         }
     });
 

@@ -50,13 +50,14 @@ class CheckSession(Resource):
     def get(self):  
         user_id = session.get('user_id')  
         if user_id:  # First, check if user_id exists in the session  
-            user = User.query.filter(User.id == user_id).first()  
+            user = User.query.filter(User.id == user_id).first()
+            
             if user:  
                 response = make_response(user.to_dict(), 200)  # This will work now  
                 return response  
 
         # If we fail to find the user or no user_id is set  
-        response_body = {'message': 'User unauthorized.'}  
+        response_body = {'message': 'Please log in.'}  
         response = make_response(response_body, 401)  
         return response  
 
@@ -122,29 +123,6 @@ class Users(Resource):
 
 
 class UserByID(Resource):
-    def get(self, id):   # already being done by checksession tho 
-        # allow users to view others' profile
-        user = User.query.filter(
-            User.id == id
-        ).first()
-
-        if user:
-            user.appl
-            response = make_response(
-                jsonify(user.to_dict()),
-                200
-            )
-            return response
-        else:
-            response_body = {
-                "message": "User not found."
-            }
-            response = make_response(
-                response_body,
-                404
-            )
-            return response
-
     def patch(self, id):    # edit email and/or name
         user_data = request.get_json()
         user = User.query.filter(User.id == id).first()
@@ -336,7 +314,37 @@ class Reviews(Resource):
         return response
     
 
-class Adopt(Resource):
+class Applications(Resource):
+    def get(self):
+        user_id = session['user_id']
+        if user_id not in session:
+            response = make_response(
+                {"message": "Not logged in"},
+                401
+            )
+            return response
+        
+        applications = []
+
+        for app in AdoptionApplication.query.all():
+            app_dict = app.to_dict()
+            applications.append(app_dict)
+
+        if not applications:
+            response = make_response(
+                {
+                    "message": "No applications found."
+                },
+                404
+            )
+            return response
+        
+        response = make_response(
+            jsonify(applications),
+            200
+        )
+        return response
+            
     def post(self):
         user_id = session['user_id']
         if user_id not in session:
@@ -432,12 +440,12 @@ api.add_resource(Login, '/login')   # done
 api.add_resource(CheckSession, '/check_session')   # done
 api.add_resource(Logout, '/logout')   # done
 api.add_resource(Users, '/users')   # done
-api.add_resource(UserByID, '/user/<int:id>')    # for search bar  # done
+api.add_resource(UserByID, '/user/<int:id>') # done
 api.add_resource(Pets, '/pets')    # done
-api.add_resource(UploadImages, '/uploads/<path:filename>')
-api.add_resource(PetByID, '/pet/<int:id>') 
+api.add_resource(UploadImages, '/uploads/<path:filename>')   # done
+api.add_resource(PetByID, '/pet/<int:id>')  # done
 api.add_resource(Reviews, '/reviews')  # done
-api.add_resource(Adopt, '/application')
+api.add_resource(Applications, '/applications')
 api.add_resource(ApplicationByPet, '/pet/<int:id>/applications')
 api.add_resource(ApplicationByID, '/application/<int:id>')
 

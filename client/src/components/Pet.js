@@ -1,6 +1,7 @@
 // WORKING!
 
-// displays individual pet info clicked for view from Home
+// displays individual pet info clicked for view from Home, allow users to apply for adoption
+
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
 

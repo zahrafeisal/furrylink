@@ -23,19 +23,6 @@ class User(db.Model, SerializerMixin):  # one to many with Pet
     applications = db.relationship('AdoptionApplication', back_populates='user')  
     reviews = db.relationship('Review', back_populates='user')
 
-    # def to_dict(self):
-    #     return {
-    #         'id': self.id,  
-    #         'first_name': self.first_name,  
-    #         'last_name': self.last_name,  
-    #         'email': self.email,  
-    #         'telephone': self.telephone,  
-    #         'animal_shelter': self.animal_shelter,  
-    #         'organization_name': self.organization_name,  
-    #         'pets_added': [pet.to_dict() for pet in self.pets_added],  
-    #         'applications': [app.to_dict() for app in self.applications],
-    #     }
-
     @hybrid_property
     def password_hash(self):
         return self._password_hash
@@ -73,19 +60,6 @@ class Pet(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='pets_added')
     applications = db.relationship('AdoptionApplication', back_populates='pet')
 
-    # def to_dict(self):
-    #     return {
-    #         'id': self.id,
-    #         'type': self.type,
-    #         'breed': self.breed,
-    #         'age': self.age,
-    #         'price': self.price,
-    #         'image_filename': self.image_filename,
-    #         'user_id': self.user_id,
-    #         'user': self.user.to_dict(),
-    #         'applications': [app.to_dict() for app in self.applications]  
-    #     } 
-
 
 class Review(db.Model, SerializerMixin):    # one to many rlship w user
     __tablename__ = 'reviews'
@@ -100,15 +74,6 @@ class Review(db.Model, SerializerMixin):    # one to many rlship w user
 
     # Relationships  
     user = db.relationship('User', back_populates='reviews')
-
-    # def to_dict(self):
-    #     return {
-    #         'id':self.id,
-    #         'date': self.date,
-    #         'comment': self.comment,
-    #         'user_id': self.user_id,
-    #         'user': self.user.to_dict()
-    #     }
 
 
 class AdoptionApplication(db.Model, SerializerMixin):
@@ -127,13 +92,3 @@ class AdoptionApplication(db.Model, SerializerMixin):
     # Relationships  
     pet = db.relationship('Pet', back_populates='applications')  
     user = db.relationship('User', back_populates='applications')  
-
-    # def to_dict(self):
-    #     return {
-    #         "id": self.id,
-    #         "description": self.description,
-    #         "status": self.status,
-    #         "created_at": self.created_at,
-    #         "pet": self.pet.to_dict(),
-    #         "user": self.user.to_dict()
-    #     }
