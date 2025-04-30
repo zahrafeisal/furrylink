@@ -7,6 +7,8 @@ from config import db, bcrypt
 class User(db.Model, SerializerMixin):  # one to many with Pet  
     __tablename__ = 'users'  
 
+    serialize_rules = ('-pets_added.user', '-applications.user', '-reviews.user',)
+
     id = db.Column(db.Integer, primary_key=True)  
     first_name = db.Column(db.String, nullable=True)  # Nullable to accommodate shelters  
     last_name = db.Column(db.String, nullable=True)    # Nullable to accommodate shelters  
@@ -21,18 +23,18 @@ class User(db.Model, SerializerMixin):  # one to many with Pet
     applications = db.relationship('AdoptionApplication', back_populates='user')  
     reviews = db.relationship('Review', back_populates='user')
 
-    serialize_rules = ('-pets_added.user', '-applications.user', '-reviews.user',)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email,
-            'telephone': self.telephone,
-            'animal_shelter': self.animal_shelter,
-            'organization_name': self.organization_name,
-        }
+    # def to_dict(self):
+    #     return {
+    #         'id': self.id,  
+    #         'first_name': self.first_name,  
+    #         'last_name': self.last_name,  
+    #         'email': self.email,  
+    #         'telephone': self.telephone,  
+    #         'animal_shelter': self.animal_shelter,  
+    #         'organization_name': self.organization_name,  
+    #         'pets_added': [pet.to_dict() for pet in self.pets_added],  
+    #         'applications': [app.to_dict() for app in self.applications],
+    #     }
 
     @hybrid_property
     def password_hash(self):
@@ -55,6 +57,8 @@ class User(db.Model, SerializerMixin):  # one to many with Pet
 class Pet(db.Model, SerializerMixin): 
     __tablename__ = 'pets'
 
+    serialize_rules = ('-user.pets_added', '-applications.pet',)
+
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String)
     breed = db.Column(db.String)
@@ -69,23 +73,24 @@ class Pet(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='pets_added')
     applications = db.relationship('AdoptionApplication', back_populates='pet')
 
-    serialize_rules = ('-user.pets_added', '-applications.pet',)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'type': self.type,
-            'breed': self.breed,
-            'age': self.age,
-            'price': self.price,
-            'image_filename': self.image_filename,
-            'user_id': self.user_id,
-            'user': self.user.to_dict()
-        } 
+    # def to_dict(self):
+    #     return {
+    #         'id': self.id,
+    #         'type': self.type,
+    #         'breed': self.breed,
+    #         'age': self.age,
+    #         'price': self.price,
+    #         'image_filename': self.image_filename,
+    #         'user_id': self.user_id,
+    #         'user': self.user.to_dict(),
+    #         'applications': [app.to_dict() for app in self.applications]  
+    #     } 
 
 
 class Review(db.Model, SerializerMixin):    # one to many rlship w user
     __tablename__ = 'reviews'
+
+    serialize_rules = ('-user.reviews',)
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.now)
@@ -95,20 +100,21 @@ class Review(db.Model, SerializerMixin):    # one to many rlship w user
 
     # Relationships  
     user = db.relationship('User', back_populates='reviews')
-    serialize_rules = ('-user.reviews',)
 
-    def to_dict(self):
-        return {
-            'id':self.id,
-            'date': self.date,
-            'comment': self.comment,
-            'user_id': self.user_id,
-            'user': self.user.to_dict()
-        }
+    # def to_dict(self):
+    #     return {
+    #         'id':self.id,
+    #         'date': self.date,
+    #         'comment': self.comment,
+    #         'user_id': self.user_id,
+    #         'user': self.user.to_dict()
+    #     }
 
 
-class AdoptionApplication(db.Model):
+class AdoptionApplication(db.Model, SerializerMixin):
     __tablename__ = 'adoption_applications'
+
+    serialize_rules = ("-pet.applications", "-user.applications",)
 
     id = db.Column(db.Integer, primary_key=True)  
     description= db.Column(db.String)     # describe why they would like to adopt the pet
@@ -121,3 +127,13 @@ class AdoptionApplication(db.Model):
     # Relationships  
     pet = db.relationship('Pet', back_populates='applications')  
     user = db.relationship('User', back_populates='applications')  
+
+    # def to_dict(self):
+    #     return {
+    #         "id": self.id,
+    #         "description": self.description,
+    #         "status": self.status,
+    #         "created_at": self.created_at,
+    #         "pet": self.pet.to_dict(),
+    #         "user": self.user.to_dict()
+    #     }

@@ -25,7 +25,8 @@ function Home({ pets }) {
         setUserSearch(input);
 
         const filterPets = allPets.filter(pet => 
-            pet.type.toLowerCase().includes(input)
+            pet.type.toLowerCase().includes(input) ||
+            pet.breed.toLowerCase().includes(input)
         )
 
         console.log(filterPets);

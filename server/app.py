@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from flask import request, make_response, session, send_from_directory
+from flask import request, make_response, session, send_from_directory, jsonify
 from flask_restful import Resource
 from werkzeug.utils import secure_filename  
 from werkzeug.exceptions import BadRequest  
@@ -129,8 +129,9 @@ class UserByID(Resource):
         ).first()
 
         if user:
+            user.appl
             response = make_response(
-                user.to_dict(),
+                jsonify(user.to_dict()),
                 200
             )
             return response
@@ -165,7 +166,7 @@ class UserByID(Resource):
         db.session.commit()
 
         response = make_response(
-            user.to_dict(),
+            jsonify(user.to_dict()),
             200
         )
         return response
@@ -184,7 +185,7 @@ class Pets(Resource):
 
         if pets:
             response = make_response(
-                pets,
+                jsonify(pets),
                 200
             )
             return response
@@ -304,7 +305,7 @@ class Reviews(Resource):
             return response
         
         response = make_response(
-            reviews,
+            jsonify(reviews),
             200
         )
         return response
@@ -336,10 +337,94 @@ class Reviews(Resource):
     
 
 class Adopt(Resource):
-
     def post(self):
-        new_application = AdoptionApplication()
-        pass
+        user_id = session['user_id']
+        if user_id not in session:
+            response = make_response(
+                {"message": "Not logged in"},
+                401
+            )
+            return response
+        
+        data = request.get_json()
+        pet_id = data['petID']
+        new_application = AdoptionApplication(
+            description=data['description'],
+            user_id=user_id,
+            pet_id=pet_id
+        )
+        
+        db.session.add(new_application)
+        db.session.commit()
+
+        response = make_response(
+            new_application.to_dict(),
+            201
+        )
+        return response
+
+
+class ApplicationByPet(Resource):
+    def get(self, pet_id):
+        user_id = session['user_id']
+        pet = Pet.query.filter(
+            Pet.id == pet_id
+        ).first()
+
+        if not pet:
+            response = make_response(
+                {"message": "Pet not found"},
+                404
+            )
+            return response
+        
+        if not user_id or pet.user_id != user_id:
+            response = make_response(
+                {"message": "Not logged in"},
+                401
+            )
+            return response
+        
+        applications = pet.applications
+
+        if applications:
+            response = make_response(
+                jsonify(applications),
+                200
+            )
+            return response
+        else:
+            response = make_response(
+                {"message": "No applications found"},
+                404
+            )
+            return response
+
+
+class ApplicationByID(Resource):  
+    def patch(self, id):  
+        user_id = session.get('user_id')  
+        application = AdoptionApplication.query.filter(
+            AdoptionApplication.id == id
+        ).first()
+
+        if not application:  
+            return make_response({"message": "Application not found."}, 404) 
+        
+        pet = application.pet  
+
+        if not user_id or pet.user_id != user_id:  
+            return make_response({"message": "Not authorized."}, 401)
+        
+        data = request.get_json()  
+        new_status = data.get('status')  
+
+        if new_status not in ['Pending', 'Approved', 'Rejected']:  
+            return {"message": "Invalid status."}, 400  
+        
+        application.status = new_status  
+        db.session.commit()  
+        return make_response(application.to_dict(), 200)
 
 
 
@@ -353,6 +438,8 @@ api.add_resource(UploadImages, '/uploads/<path:filename>')
 api.add_resource(PetByID, '/pet/<int:id>') 
 api.add_resource(Reviews, '/reviews')  # done
 api.add_resource(Adopt, '/application')
+api.add_resource(ApplicationByPet, '/pet/<int:id>/applications')
+api.add_resource(ApplicationByID, '/application/<int:id>')
 
 
 if __name__ == '__main__':

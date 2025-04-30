@@ -22,7 +22,7 @@ function Reviews() {
 
     return (
         <div>
-            {reviews.map(review => (
+            {reviews && reviews.map(review => (
                 <div key={review.id}>
                     <p>{review.user.email}</p>
                     <p>{review.date}</p>

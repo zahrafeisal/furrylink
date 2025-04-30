@@ -28,6 +28,7 @@ function AddPet({ user }) {
     const formik = useFormik({  
         initialValues: {  
             email: "", // Readonly  
+            telephone: "",  // Readonly
             animalType: "",  
             breed: "",  
             age: "",  
@@ -68,6 +69,7 @@ function AddPet({ user }) {
     useEffect(() => {  
         if (user) {  
             formik.setFieldValue('email', user.email); // Update email when user changes  
+            formik.setFieldValue('telephone', user.telephone); // Update tel when user changes  
         }  
     }, [user]);  
 
@@ -88,6 +90,17 @@ function AddPet({ user }) {
                         id="email"  
                         readOnly  
                         value={formik.values.email}  
+                        size={30}  
+                    />  
+                </div>  
+                <div>  
+                    <label htmlFor="telephone">User telephone</label>  
+                    <input  
+                        type="tel"  
+                        id="telephone"
+                        name="telephone"    
+                        readOnly  
+                        value={formik.values.telephone}  
                         size={30}  
                     />  
                 </div>  

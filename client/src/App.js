@@ -15,26 +15,35 @@ import AddPet from './components/AddPet';
 import Navbar from './components/Navbar';
 
 
-function App() {
-    const [currentUser, setCurrentUser] = useState(null);
-    const [pets, setPets] = useState([]);
+// Protected route component, prevent unauthorized users from accessing
+function PrivateRoute({ children, currentUser }) {  
+    return currentUser ? children : <Navigate to="/" />;  
+}  
 
-    useEffect(() => {     // check if user is logged in to determine whether Home or LandingPage is rendered
-        fetch("/check_session")
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Failed to check session'); 
-        })
-        .then((user) => {
-            setCurrentUser(user);
-            console.log(user);
-        })
-        .catch((error) => {
-            console.log(error.message);
-        })
-    }, [])
+
+function App() {
+    const [currentUser, setCurrentUser] = useState(null);  
+    const [pets, setPets] = useState([]);  
+    
+    // Function to fetch the latest user data  
+    const fetchCurrentUser = () => {  
+        fetch("/check_session")  
+        .then(res => {  
+            if (res.ok) return res.json();  
+            throw new Error('Failed to fetch user session');  
+        })  
+        .then(user => {  
+            setCurrentUser(user);  
+        })  
+        .catch(err => {  
+            console.log(err.message);  
+        });  
+    };  
+    
+    // Call fetchCurrentUser when needed, e.g., after user updates  
+    useEffect(() => {  
+        fetchCurrentUser();  
+    }, []);  
 
     useEffect(() => {    // fetch pets on initial render in the case where the Home component is "/"
         fetch("/pets")
@@ -51,23 +60,28 @@ function App() {
         })
     }, []);
 
-    if (!currentUser) {
-        <Navigate to={"/"}/>
-    }
-
-
     return (
         <Router>
             {currentUser && <Navbar user={currentUser} />}
             <Routes>
+
+                {/* public routes */}
                 <Route path='/' element={<LandingPage />}/>
+                <Route path='/users' element={<SignupForm onSignUp={setCurrentUser}/>}/>
                 <Route path='/login' element={<LoginForm onLogin={setCurrentUser}/>}/>
                 <Route path='/home' element={<Home pets={pets}/>}/>
-                <Route path='/user/:id' element={<UserProfile user={currentUser} setUpdatedUser={setCurrentUser}/>}/>
-                <Route path='/users' element={<SignupForm onSignUp={setCurrentUser}/>}/>
-                <Route path='/pets' element={<AddPet user={currentUser}/>} />
+                
+                {/* Protected routes */}
+                <Route path='/user/:id' element={<UserProfile
+                    user={currentUser}
+                    setUpdatedUser={setCurrentUser}
+                    fetchUser={fetchCurrentUser}
+                    />}
+                />
+                <Route path='/pets' element={<AddPet user={currentUser}/>}/>
                 <Route path='/reviews' element={<ReviewForm user={currentUser}/>}/>
                 <Route path='/pet/:id' element={<Pet />}/>
+                <Route path='/application' element={<ApplicationForm currentUser={currentUser}/>}/>
             </Routes>
         </Router>
     )

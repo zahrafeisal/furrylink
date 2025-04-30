@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-function UserProfile({ user, currentUserID, setUpdatedUser }) {
+function UserProfile({ user, currentUserID, setUpdatedUser, fetchUser }) {
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
     const [userDetails, setUserDetails] = useState({
@@ -53,6 +53,7 @@ function UserProfile({ user, currentUserID, setUpdatedUser }) {
         .then((updatedUser) => {
             console.log(updatedUser);
             setUpdatedUser(updatedUser);
+            fetchUser();
             setEditMode(false);
         })
         .catch((error) => {
@@ -83,7 +84,7 @@ function UserProfile({ user, currentUserID, setUpdatedUser }) {
     }
 
     function handleApplicationClick(id) {
-        navigate(`/application/${id}`)    // navigate to AppDeets component, useLocation needed
+        navigate(`/application/${id}`)    // navigate to AppDeets component, useLocation needed, to view individual components
     }
 
     function handleLogOut() {
@@ -99,6 +100,21 @@ function UserProfile({ user, currentUserID, setUpdatedUser }) {
             alert(error.message)
         })
     }
+
+    function handleStatusChange(applicationId, newStatus) {  
+        fetch(`/application/${applicationId}`, {  
+          method: 'PATCH',  
+          headers: {  
+            'Content-Type': 'application/json'  
+          },  
+          body: JSON.stringify({ status: newStatus })  
+        })  
+        .then(res => res.json())  
+        .then(updatedApplication => {  
+          // update state or refetch applications  
+          // e.g., setApplications(prev => prev.map(app => app.id === updatedApplication.id ? updatedApplication : app))  
+        });  
+    }  
 
     return (
         <div>
@@ -127,24 +143,34 @@ function UserProfile({ user, currentUserID, setUpdatedUser }) {
                     <div key={pet.id}>
                         <p>{}</p>
                         <button onClick={() => handlePetClick(pet.id)}>View more</button>
-                        {user.id === currentUserID && (
-                            <>
-                              <button onClick={() => handlePetAdopted(pet.id)}>Adopted</button>
-                            </>
-                        )}
+                        <button onClick={() => handlePetAdopted(pet.id)}>Adopted</button>
                     </div>
                 ))}
             </div>
             {/* for each loop, display in list form applications made and status, if any */}
-            <ol>
-            {applications && applications.map((application) => (
-                <li
-                  onClick={() => handleApplicationClick(application.id)}
-                >
-                    {application.pet.breed}
-                </li>
+            {applications && applications.map((app) => (
+                <div key={app.id} style={{border: '1px solid black', margin: '10px', padding: '10px'}}>
+                    {/* show applicant info */}
+                    <p>Name: {app.user.first_name} {app.user.last_name}</p>  
+                    <p>Description: {app.description}</p>  
+                    <p>Status: {app.status}</p>  
+                    {/* Show buttons only if current user owns the pet */}  
+                    {app.pet.user_id === currentUserID && (  
+                        <>  
+                        {app.status !== 'Approved' && (  
+                            <button onClick={() => handleStatusChange(app.id, 'Approved')}>  
+                              Approve  
+                            </button>  
+                        )}  
+                        {app.status !== 'Rejected' && (  
+                            <button onClick={() => handleStatusChange(app.id, 'Rejected')}>  
+                              Reject  
+                            </button>  
+                        )}  
+                        </>  
+                    )}  
+                </div>  
             ))}
-            </ol>
             <button onClick={handleLogOut}>Log out</button>
         </div>
     )
