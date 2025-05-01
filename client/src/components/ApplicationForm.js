@@ -20,11 +20,15 @@ const ApplicationForm = ({ currentUser }) => {
           petBreed: pet?.breed || "",  
           petAge: pet?.age || "",  
           petPrice: pet?.price || "",  
-          ownerName: pet?.user?.first_name || "",  
+          ownerName: pet?.user?.animal_shelter 
+            ? pet?.user?.organization_name || "" 
+            : (pet?.user?.first_name && pet?.user?.last_name ? `${pet?.user?.first_name} ${pet?.user?.last_name}` : ""),
           ownerEmail: pet?.user?.email || "",  
           ownerTelephone: pet?.user?.telephone || "",  
           animalShelter: pet?.user?.animal_shelter || "",  
-          userName: currentUser?.first_name || "",  
+          userName: currentUser?.animal_shelter 
+            ? currentUser?.organization_name || "" 
+            : (currentUser?.first_name && currentUser?.last_name ? `${currentUser?.first_name} ${currentUser?.last_name}` : ""),  
           userEmail: currentUser?.email || "",  
           userTelephone: currentUser?.telephone || "",  
           description: ""  
@@ -54,6 +58,9 @@ const ApplicationForm = ({ currentUser }) => {
             })
             .then((application) => {
                 console.log(application)
+            })
+            .catch((error) => {
+                alert(error.message)
             })
         }
     });
@@ -172,6 +179,7 @@ const ApplicationForm = ({ currentUser }) => {
                       id="userTelephone"
                       name="userTelephone"
                       value={formik.values.ownerTelephone}
+                      readOnly
                     />
                     <label htmlFor="description"></label>
                     <input

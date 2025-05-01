@@ -16,117 +16,150 @@ import ApplicationsReceived from './components/ApplicationsReceived';
 import ApplicationsSent from './components/ApplicationsSent';
 import AppRcvdDetails from './components/AppRcvdDetails';
 import AppSentDetails from './components/AppSentDetails';
-
+import Unauthorized from './components/Unauthorized';
 
 // Protected route component, prevent unauthorized users from accessing
-function PrivateRoute({ children, currentUser }) {  
-    return currentUser ? children : <Navigate to="/" />;  
-}  
-
+function PrivateRoute({ children, currentUser, isCheckingAuth }) {
+    if (isCheckingAuth) {
+        return <div>Loading...</div>; // Or a spinner
+    }
+    return currentUser ? children : <Navigate to="/unauthorized" />;
+}
 
 function App() {
-    const [currentUser, setCurrentUser] = useState(null);  
-    const [pets, setPets] = useState([]);  
-    
-    // Function to fetch the latest user data  
-    const fetchCurrentUser = () => {  
-        fetch("/check_session")  
-        .then((response) => {  
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error("No user logged in")
-            }
-        })  
-        .then((user) => {  
-            console.log(user);
-            setCurrentUser(user);  
-        })  
-        .catch((error) => {  
-            console.log(error.message);  
-        });  
-    };  
-    
-    // Call fetchCurrentUser when needed, e.g., after user updates  
-    useEffect(() => {  
-        fetchCurrentUser();  
-    }, []);  
+    const [currentUser, setCurrentUser] = useState(null);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+    const [pets, setPets] = useState([]);
 
-    useEffect(() => {    // fetch pets on initial render in the case where the Home component is "/"
+    // Function to fetch the latest user data
+    const fetchCurrentUser = () => {
+        setIsCheckingAuth(true);
+        fetch("/check_session")
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("No user logged in");
+            }
+        })
+        .then((user) => {
+            setCurrentUser(user);
+            setIsCheckingAuth(false);
+        })
+        .catch((error) => {
+            console.log(error.message);
+        });
+    };
+
+    // Call fetchCurrentUser on initial render
+    useEffect(() => {
+        fetchCurrentUser();
+    }, []);
+
+    // Fetch pets data on initial load
+    useEffect(() => {
         fetch("/pets")
         .then((response) => {
             if (response.ok) {
                 return response.json();
-            } 
+            }
+            throw new Error("Failed to fetch pets");
         })
         .then((pets) => {
-            setPets(pets)
+            setPets(pets);
         })
         .catch((error) => {
-            alert(error.message)
-        })
+            alert(error.message);
+        });
     }, []);
 
     return (
         <Router>
             {currentUser && <Navbar user={currentUser} />}
             <Routes>
+                {/* Public routes */}
+                <Route path='/' element={<LandingPage />} />
+                <Route path='/users' element={<SignupForm onSignUp={setCurrentUser} />} />
+                <Route path='/login' element={<LoginForm onLogin={setCurrentUser} />} />
+                <Route path='/home' element={<Home pets={pets} />} />
+                <Route path='/unauthorized' element={<Unauthorized />} />
 
-                {/* public routes */}
-                <Route path='/' element={<LandingPage />}/>
-                <Route path='/users' element={<SignupForm onSignUp={setCurrentUser}/>}/>
-                <Route path='/login' element={<LoginForm onLogin={setCurrentUser}/>}/>
-                <Route path='/home' element={<Home pets={pets}/>}/>
-                
                 {/* Protected routes */}
-                <Route path='/user/:id'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <UserProfile user={currentUser} setUpdatedUser={setCurrentUser} fetchUser={fetchCurrentUser}/>
-                  </PrivateRoute>}
+                <Route
+                    path='/user/:id'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <UserProfile user={currentUser} setUpdatedUser={setCurrentUser} fetchUser={fetchCurrentUser} />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/pets'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <AddPet user={currentUser}/>
-                  </PrivateRoute>}
+                <Route
+                    path='/pets'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <AddPet user={currentUser} />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/reviews' 
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <ReviewForm user={currentUser}/>
-                  </PrivateRoute>}
+                <Route
+                    path='/reviews'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <ReviewForm user={currentUser} />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/pet/:id'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <Pet />
-                  </PrivateRoute>}
+                <Route
+                    path='/pet/:id'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <Pet />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/application'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <ApplicationForm currentUser={currentUser}/>
-                  </PrivateRoute>}
+                <Route
+                    path='/application'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <ApplicationForm currentUser={currentUser} />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/pet-applications'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <ApplicationsReceived user={currentUser}/>
-                  </PrivateRoute>}
+                <Route
+                    path='/pet-applications'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <ApplicationsReceived user={currentUser} />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/sent-applications'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <ApplicationsSent currentUser={currentUser}/>
-                  </PrivateRoute>}
+                <Route
+                    path='/sent-applications'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <ApplicationsSent currentUser={currentUser} />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/pet-application/:id'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <AppRcvdDetails/>
-                  </PrivateRoute>}
+                <Route
+                    path='/pet-application/:id'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <AppRcvdDetails />
+                        </PrivateRoute>
+                    }
                 />
-                <Route path='/sent-application/:id'
-                  element={<PrivateRoute currentUser={currentUser}>
-                    <AppSentDetails/>
-                  </PrivateRoute>}
+                <Route
+                    path='/sent-application/:id'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <AppSentDetails />
+                        </PrivateRoute>
+                    }
                 />
             </Routes>
         </Router>
-    )
+    );
 }
 
 export default App;

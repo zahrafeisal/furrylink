@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router";
 
 function AppRcvdDetails() {
     const location = useLocation();
-    const application = location.state?.app;
+    const applicationData = location.state?.app;
+
+    // Initialize state with the application's current data
+    const [application, setApplication] = useState(applicationData);
 
     if (!application) {
         return <p>No application data available.</p>;
@@ -25,28 +28,37 @@ function AppRcvdDetails() {
             }
         })
         .then((updatedApplication) => {
-            console.log(updatedApplication);
-            // Update state here if needed, e.g., show updated status
+            // Update local state with the new data
+            setApplication(updatedApplication);
         })
         .catch((error) => {
-            alert(error.message)
+            alert(error.message);
         });
     }
+
+    // Only show buttons if status is "Pending"
+    const isPending = application.status === "Pending";
 
     return (
         <div>
             <h2>Application Details</h2>
             <p><strong>Pet:</strong> {application.pet.breed} ({application.pet.type})</p>
-            <p><strong>Applicant:</strong> {application.user.first_name} {application.user.last_name}</p>
+            <p>
+                <strong>Applicant:</strong>
+                {application.user?.animal_shelter
+                    ? `${application.user.organization_name ?? 'N/A'}`
+                    : `${application.user?.first_name ?? ''} ${application.user?.last_name ?? ''}`.trim()
+                }
+            </p>
             <p><strong>Description:</strong> {application.description}</p>
             <p><strong>Status:</strong> {application.status}</p>
 
-            {/* Show buttons unconditionally */}
-            {application.status !== 'Approved' && (
-                <button onClick={() => handleStatusChange(application.id, 'Approved')}>Approve</button>
-            )}
-            {application.status !== 'Rejected' && (
-                <button onClick={() => handleStatusChange(application.id, 'Rejected')} style={{ marginLeft: '10px' }}>Reject</button>
+            {/* Show approval/rejection buttons only if status is "Pending" */}
+            {isPending && (
+                <>
+                    <button onClick={() => handleStatusChange(application.id, 'Approved')}>Approve</button>
+                    <button onClick={() => handleStatusChange(application.id, 'Rejected')} style={{ marginLeft: '10px' }}>Reject</button>
+                </>
             )}
         </div>
     );

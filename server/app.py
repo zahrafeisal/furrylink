@@ -6,6 +6,7 @@ from flask_restful import Resource
 from werkzeug.utils import secure_filename  
 from werkzeug.exceptions import BadRequest  
 from models import User, Pet, Review, AdoptionApplication
+
 from config import app, db, api
 
 
@@ -236,11 +237,7 @@ class UploadImages(Resource):
         return send_from_directory('uploads', filename)
 
 
-class PetByID(Resource):   # i dont think i need this but idk
-    def get(self, id):
-        # allow users to view preferred pet (VIEW MORE button) , or search for pet
-        pass
-
+class PetByID(Resource):  
     def delete(self, id):  # allow users to delete pets they put up for adoption, WHEN ADOPTED (ADOPTED button)
         deleted_pet = Pet.query.filter(Pet.id == id).first()
 
@@ -253,13 +250,14 @@ class PetByID(Resource):   # i dont think i need this but idk
             )
             return response
 
-        db.session.remove(deleted_pet)
+        db.session.delete(deleted_pet)
         db.session.commit()
 
         response = make_response(
             {
                 "message": "Pet deleted successfully!"
-            }
+            },
+            204
         )
         return response
         
@@ -316,10 +314,11 @@ class Reviews(Resource):
 
 class Applications(Resource):
     def get(self):
-        user_id = session['user_id']
-        if user_id not in session:
+        if 'user_id' not in session:
             response = make_response(
-                {"message": "Not logged in"},
+                {
+                    "message": "User not authorized."
+                },
                 401
             )
             return response
@@ -346,10 +345,11 @@ class Applications(Resource):
         return response
             
     def post(self):
-        user_id = session['user_id']
-        if user_id not in session:
+        if 'user_id' not in session:
             response = make_response(
-                {"message": "Not logged in"},
+                {
+                    "message": "User not authorized."
+                },
                 401
             )
             return response
@@ -358,7 +358,7 @@ class Applications(Resource):
         pet_id = data['petID']
         new_application = AdoptionApplication(
             description=data['description'],
-            user_id=user_id,
+            user_id=session.get('user_id'),
             pet_id=pet_id
         )
         
@@ -370,43 +370,6 @@ class Applications(Resource):
             201
         )
         return response
-
-
-class ApplicationByPet(Resource):
-    def get(self, pet_id):
-        user_id = session['user_id']
-        pet = Pet.query.filter(
-            Pet.id == pet_id
-        ).first()
-
-        if not pet:
-            response = make_response(
-                {"message": "Pet not found"},
-                404
-            )
-            return response
-        
-        if not user_id or pet.user_id != user_id:
-            response = make_response(
-                {"message": "Not logged in"},
-                401
-            )
-            return response
-        
-        applications = pet.applications
-
-        if applications:
-            response = make_response(
-                jsonify(applications),
-                200
-            )
-            return response
-        else:
-            response = make_response(
-                {"message": "No applications found"},
-                404
-            )
-            return response
 
 
 class ApplicationByID(Resource):  
@@ -435,7 +398,6 @@ class ApplicationByID(Resource):
         return make_response(application.to_dict(), 200)
 
 
-
 api.add_resource(Login, '/login')   # done
 api.add_resource(CheckSession, '/check_session')   # done
 api.add_resource(Logout, '/logout')   # done
@@ -446,7 +408,6 @@ api.add_resource(UploadImages, '/uploads/<path:filename>')   # done
 api.add_resource(PetByID, '/pet/<int:id>')  # done
 api.add_resource(Reviews, '/reviews')  # done
 api.add_resource(Applications, '/applications')
-api.add_resource(ApplicationByPet, '/pet/<int:id>/applications')
 api.add_resource(ApplicationByID, '/application/<int:id>')
 
 

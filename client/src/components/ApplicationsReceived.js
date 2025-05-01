@@ -51,7 +51,13 @@ function ApplicationsReceived({ user }) {
                       onClick={() => handleApplicationClick(app)}
                     >
                         <p>Pet: {app.pet.breed} ({app.pet.type})</p>
-                        <p>Applicant: {app.user.first_name} {app.user.last_name}</p>
+                        <p>
+                            <strong>Received from:</strong>
+                            {app.user?.animal_shelter
+                                ? `${app.user.organization_name ?? 'N/A'}`
+                                : `${app.user?.first_name ?? ''} ${app.user?.last_name ?? ''}`.trim()
+                            }
+                        </p>
                         <p>Status: {app.status}</p>
                     </div>
                 ))

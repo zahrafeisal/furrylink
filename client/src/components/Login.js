@@ -3,7 +3,7 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import * as Yup from "yup";
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from "react-router";
 
 const LoginForm = ({ onLogin }) => {
     const navigate = useNavigate();
@@ -94,7 +94,9 @@ const LoginForm = ({ onLogin }) => {
               type='submit'
               value={'Log in'}
             /> 
-        </form>  
+        </form> 
+        <p>Don't have an account?</p>
+        <Link to={"/users"}>Sign up</Link> 
         </div>
     )
 }

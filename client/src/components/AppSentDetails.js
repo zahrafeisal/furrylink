@@ -12,12 +12,20 @@ function AppSentDetails() {
     return (
         <div>
             <h2>Application Details</h2>
-            <p><strong>Pet:</strong> {application.pet.breed} ({application.pet.type})</p>
-            <p><strong>Applicant:</strong> {application.user.first_name} {application.user.last_name}</p>
-            <p><strong>Description:</strong> {application.description}</p>
-            <p><strong>Status:</strong> {application.status}</p>
+            <p>
+                <strong>Pet:</strong> {application.pet?.breed ?? 'N/A'} ({application.pet?.type ?? 'N/A'})
+            </p>
+            <p>
+                <strong>Sent to:</strong>
+                {application?.pet.user?.animal_shelter
+                    ? `${application.pet.user.organization_name ?? 'N/A'}`
+                    : `${application?.pet.user?.first_name ?? ''} ${application?.pet.user?.last_name ?? ''}`.trim()
+                }
+            </p>
+            <p><strong>Description:</strong> {application.description ?? 'N/A'}</p>
+            <p><strong>Status:</strong> {application.status ?? 'N/A'}</p>
         </div>
     );
 }
 
-export default AppSentDetails
+export default AppSentDetails;

@@ -250,6 +250,8 @@ const SignupForm = ({ onSignUp }) => {
                   id='signUpSubmit'  
                 />   
             </form>  
+            <p>Already have an account?</p>
+            <Link to={"/login"}>Log in</Link> 
         </div>  
     );  
 };  
