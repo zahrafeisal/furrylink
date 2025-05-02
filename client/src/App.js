@@ -8,7 +8,6 @@ import LandingPage from './components/LandingPage';
 import UserProfile from './components/UserProfile';
 import Pet from './components/Pet';
 import ReviewForm from './components/ReviewForm';
-import Reviews from './components/Reviews';
 import ApplicationForm from './components/ApplicationForm';
 import AddPet from './components/AddPet';
 import Navbar from './components/Navbar';
@@ -21,7 +20,7 @@ import Unauthorized from './components/Unauthorized';
 // Protected route component, prevent unauthorized users from accessing
 function PrivateRoute({ children, currentUser, isCheckingAuth }) {
     if (isCheckingAuth) {
-        return <div>Loading...</div>; // Or a spinner
+        return <div style={{marginTop: '500px'}}><i className="fa-solid fa-spinner"></i></div>; // Or a spinner
     }
     return currentUser ? children : <Navigate to="/unauthorized" />;
 }

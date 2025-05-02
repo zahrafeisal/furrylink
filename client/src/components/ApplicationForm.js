@@ -51,6 +51,7 @@ const ApplicationForm = ({ currentUser }) => {
             })
             .then((response) => {
                 if (response.ok) {
+                    resetForm()
                     return response.json()
                 } else {
                     throw new Error("Problem posting application")
@@ -78,14 +79,20 @@ const ApplicationForm = ({ currentUser }) => {
     }, [pet]);  
 
     return (
-        <div>
-            <h2>Adopt Pet</h2>
-            <form onSubmit={formik.handleSubmit}>
-                <div>
-                    <img src={pet.image_filename} alt={pet.breed} />  
+        <div className="addPet">
+            <div className='signUpHeader'>
+                <h2 className='dancing-script-landingPageh1'><strong>Ready to adopt a pet?</strong></h2>  
+                <p style={{paddingTop: '30px', color: 'gray', fontSize: '18px'}} className='tinos-regular'>
+                    <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
+                    The form below contains your details as per your profile.<br />
+                    If you wish to update this information kindly do so on your personal profile settings.
+                </p>
+            </div>  
+            <form onSubmit={formik.handleSubmit} className="addPetForm row g-0 tinos-regular">
+                <div className="col-md-6">
                     {/* all inputs readonly */}
-                    <h3>Pet details</h3>
-                    <label htmlFor="petType"></label>
+                    <h3><strong>Pet's details</strong></h3>
+                    <label htmlFor="petType">Type</label>
                     <input
                       type="text"
                       id="petType"
@@ -93,7 +100,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.petType}
                       readOnly
                     />
-                    <label htmlFor="petBreed"></label>
+                    <label htmlFor="petBreed">Breed</label>
                     <input
                       type="text"
                       id="petBreed"
@@ -101,7 +108,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.petBreed}
                       readOnly
                     />
-                    <label htmlFor="petAge"></label>
+                    <label htmlFor="petAge">Age</label>
                     <input
                       type="text"
                       id="petAge"
@@ -109,7 +116,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.petAge}
                       readOnly
                     />
-                    <label htmlFor="petPrice"></label>
+                    <label htmlFor="petPrice">Price</label>
                     <input
                       type="text"
                       id="petPrice"
@@ -118,10 +125,10 @@ const ApplicationForm = ({ currentUser }) => {
                       readOnly
                     />
                 </div>
-                <div>
+                <div className="col-md-6">
                     {/* email, name, phone number, shelter? */}
-                    <h3>Owner details</h3>
-                    <label htmlFor="ownerName"></label>
+                    <h3><strong>Custodian's details</strong></h3>
+                    <label htmlFor="ownerName">Name</label>
                     <input
                       type="text"
                       id="ownerName"
@@ -129,7 +136,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.ownerName}
                       readOnly
                     />
-                    <label htmlFor="ownerEmail"></label>
+                    <label htmlFor="ownerEmail">Email Address</label>
                     <input
                       type="email"
                       name="ownerEmail"
@@ -137,7 +144,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.ownerEmail}
                       readOnly
                     />
-                    <label htmlFor="ownerTelephone"></label>
+                    <label htmlFor="ownerTelephone">Phone Number</label>
                     <input
                       type="tel"
                       id="ownerTelephone"
@@ -145,7 +152,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.ownerTelephone}
                       readOnly
                     />
-                    <label htmlFor="animalShelter"></label>
+                    <label htmlFor="animalShelter">Registered Animal Shelter</label>
                     <input
                       type="text"
                       id="animalShelter"
@@ -154,10 +161,12 @@ const ApplicationForm = ({ currentUser }) => {
                       readOnly
                     />
                 </div>
-                <div>
+                <div className="col-12" style={{
+                    paddingTop: "50px"
+                }}>
                     {/* email & name readonly, telephone, description*/}
-                    <h3>Your details</h3>
-                    <label htmlFor="userName"></label>
+                    <h3><strong>Your details</strong></h3>
+                    <label htmlFor="userName">Name</label>
                     <input
                       type="text"
                       id="userName"
@@ -165,7 +174,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.userName}
                       readOnly
                     />
-                    <label htmlFor="userEmail"></label>
+                    <label htmlFor="userEmail">Email Address</label>
                     <input
                       type="email"
                       name="userEmail"
@@ -173,7 +182,7 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.userEmail}
                       readOnly
                     />
-                    <label htmlFor="userTelephone"></label>
+                    <label htmlFor="userTelephone">Phone Number</label>
                     <input
                       type="tel"
                       id="userTelephone"
@@ -181,19 +190,33 @@ const ApplicationForm = ({ currentUser }) => {
                       value={formik.values.ownerTelephone}
                       readOnly
                     />
-                    <label htmlFor="description"></label>
-                    <input
+                    <label htmlFor="description">Description</label>
+                    <textarea
                       type="text"
                       id="description"
                       name="description"
                       value={formik.values.description}
                       onChange={formik.handleChange}
+                      placeholder="Briefly describe how you're willing and capable to give this pet a loving and conducive environment"
+                      style={{
+                        width: '50%',
+                        height: '50%'
+                      }}
                     />
+                    {formik.touched.description && formik.errors.description ? (  
+                        <div style={{ color: 'red' }}>{formik.errors.description}</div>  
+                    ) : null}  
                 </div>
-                <input type="submit" value={"Send Application"}/>
+                <input 
+                  type="submit" 
+                  value="Send Application" 
+                  className='signUpSubmit col-md-4'
+                  style={{
+                    marginTop: '12rem'
+                  }}
+                />  
             </form>
         </div>
     )
 }
-
 export default ApplicationForm;

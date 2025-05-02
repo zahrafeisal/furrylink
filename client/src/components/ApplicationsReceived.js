@@ -35,30 +35,41 @@ function ApplicationsReceived({ user }) {
     }
 
     return (
-        <div>
-            <h2>Applications Received for Your Pets</h2>
+        <div className='addPet'>
+            <div className='signUpHeader'>
+                <h2 className='tinos-regular'><strong>Received Applications</strong></h2>  
+            </div>  
             {appsReceived.length === 0 ? (
-                <p>No applications received.</p>
+                <p 
+                  style={{paddingTop: '150px', color: 'gray', fontSize: '20px', textAlign: 'center'}} 
+                  className='tinos-regular'
+                >
+                    <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
+                    You haven't received any applications.
+                </p>
             ) : (
                 appsReceived.map(app => (
-                    <div key={app.id}
+                    <div key={app.id} className='card'
                       style={{
                         border: '1px solid black',
                         margin: '10px',
                         padding: '10px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        marginLeft: '360px',
+                        marginRight: '360px'
                       }}
                       onClick={() => handleApplicationClick(app)}
                     >
-                        <p>Pet: {app.pet.breed} ({app.pet.type})</p>
-                        <p>
-                            <strong>Received from:</strong>
-                            {app.user?.animal_shelter
-                                ? `${app.user.organization_name ?? 'N/A'}`
-                                : `${app.user?.first_name ?? ''} ${app.user?.last_name ?? ''}`.trim()
-                            }
-                        </p>
-                        <p>Status: {app.status}</p>
+                        <div className='card-header'>
+                            From: 
+                            <i className="fa-solid fa-envelope" style={{color: '#999', paddingRight: '5px', paddingLeft: '10px'}}></i>
+                            {app.user.email}
+                        </div>
+                        <div className='card-body'>
+                            <h5 className='card-title'>{app.pet.breed} ({app.pet.type})</h5>
+                            <p className='card-text'><small>{app.status}</small></p>
+                        </div>
+
                     </div>
                 ))
             )}

@@ -38,8 +38,12 @@ function Home({ pets }) {
     }
     
     return (  
-        <div className="home">  
-            <form onSubmit={handleSearchSubmit}>
+        <>
+        <div className='homeHeader satisfy-regular'>
+            <h2>Explore</h2>
+        </div>
+        <div className="tinos-regular">
+            <form onSubmit={handleSearchSubmit} className='homeSearch'>
                 <input
                   id="search"
                   type="search" 
@@ -52,20 +56,36 @@ function Home({ pets }) {
                   value={'Search'}
                 /> 
             </form>
-            {filteredPets.length === 0 ? (  
-                <p>No pets available. Please check back later!</p>  
-            ) : (  
-                filteredPets.map((pet) => (
-                    <div key={pet.id} onClick={() => handlePetClick(pet)}>
-                        <p>{pet.user.email}</p>
-                        <img src={pet.image_filename} alt={pet.breed} />  
-                        <p>{pet.breed}</p>  
-                        <p>{pet.type}</p>  
-                        <p>{pet.age}</p>  
-                    </div>  
-                ))  
-            )}  
-        </div>  
+            {filteredPets.length === 0 ? ( 
+                <div style={{
+                        textAlign: 'center',
+                        paddingTop: '120px'
+                    }}>
+                        <i style={{fontSize: '3rem'}} className="fa-solid fa-circle-exclamation"></i>
+                        <h5 style={{paddingTop: '20px'}} >No pets available. Please check back later!</h5>  
+                </div>
+                ) : (
+                    <div className='homeCards'
+                        style={{
+                            marginLeft: '140px'
+                        }}
+                    >
+                        {filteredPets.map((pet) => (
+                            <div key={pet.id} onClick={() => handlePetClick(pet)} className='homeCard' style={{width: '18rem'}}>
+                                <div className='cardImg'>
+                                    <img src={pet.image_filename} alt={pet.breed} />  
+                                </div>
+                                <div className='cardBody'>
+                                    <h5><strong>{pet.breed}</strong></h5>  
+                                    <p>{pet.type}</p>  
+                                    <p><small>Ksh. {pet.price}</small></p>
+                                </div>
+                            </div>  
+                        ))}
+                    </div>
+                )}  
+        </div> 
+        </> 
     );  
 }  
 

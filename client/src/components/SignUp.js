@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';  
 import * as Yup from 'yup';  
 import "../App.css";  
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 const SignupForm = ({ onSignUp }) => { 
     const navigate = useNavigate();
@@ -97,11 +97,13 @@ const SignupForm = ({ onSignUp }) => {
     };  
 
     return (  
-        <div className='signUpPage'>  
-            <h2>Create Account</h2>  
-            <form onSubmit={formik.handleSubmit} className='signUpForm'>  
-                <div>  
-                    <p>Are you associated with an Animal Shelter?</p>  
+        <div className='signUpPage'>
+            <div className='signUpHeader'>
+                <h2 className='dancing-script-landingPageh1'>Create Account</h2>  
+            </div>  
+            <form onSubmit={formik.handleSubmit} className='tinos-regular signUpForm row g-0'>  
+                <div className='col-12'>  
+                    <h5><strong>Registered Animal Shelter</strong></h5>  
                     <label>  
                       <input  
                         type='radio'  
@@ -126,17 +128,20 @@ const SignupForm = ({ onSignUp }) => {
                 </div>  
 
                 {isAnimalShelter ? (  
-                    <div>  
+                    <div className='col-12'>  
                         <label htmlFor='organizationName'>Name of the Organization</label>  
-                        <input  
-                          id='organizationName'  
-                          type='text'  
-                          name='organizationName'  
-                          onChange={formik.handleChange}  
-                          onBlur={formik.handleBlur}  
-                          value={formik.values.organizationName}  
-                          size={50}  
-                        />  
+                        <div style={{position: "relative"}}>
+                            <i className="fa-solid fa-trademark signUpIcon"></i>
+                            <input  
+                                id='organizationName'  
+                                type='text'  
+                                name='organizationName'  
+                                onChange={formik.handleChange}  
+                                onBlur={formik.handleBlur}  
+                                value={formik.values.organizationName}  
+                                size={50}  
+                            />  
+                        </div>
                         {formik.touched.organizationName && formik.errors.organizationName ? (  
                             <div style={{ color: 'red' }}>{formik.errors.organizationName}</div>  
                         ) : null}  
@@ -144,33 +149,39 @@ const SignupForm = ({ onSignUp }) => {
                     
                 ) : (  
                     <>  
-                        <div>  
+                        <div className='col-md-6'>  
                             <label htmlFor='firstName'>First Name</label>  
-                            <input  
-                              id='firstName'  
-                              type='text'  
-                              name='firstName'  
-                              onChange={formik.handleChange}  
-                              onBlur={formik.handleBlur}  
-                              value={formik.values.firstName}  
-                              size={50}  
-                            />  
+                            <div style={{position: "relative"}}>
+                                <i className="fa-solid fa-user signUpIcon"></i>
+                                <input  
+                                    id='firstName'  
+                                    type='text'  
+                                    name='firstName'  
+                                    onChange={formik.handleChange}  
+                                    onBlur={formik.handleBlur}  
+                                    value={formik.values.firstName}  
+                                    size={50}  
+                                /> 
+                            </div> 
                             {formik.touched.firstName && formik.errors.firstName ? (  
                                 <div style={{ color: 'red' }}>{formik.errors.firstName}</div>  
                             ) : null}  
                         </div>  
 
-                        <div>  
+                        <div className='col-md-6'>  
                             <label htmlFor='lastName'>Last Name</label>  
-                            <input  
-                              id='lastName'  
-                              type='text'  
-                              name='lastName'  
-                              onChange={formik.handleChange}  
-                              onBlur={formik.handleBlur}  
-                              value={formik.values.lastName}   
-                              size={50}   
-                            />  
+                            <div style={{position: "relative"}}>
+                                <i className="fa-solid fa-user signUpIcon2"></i>
+                                <input  
+                                    id='lastName'  
+                                    type='text'  
+                                    name='lastName'  
+                                    onChange={formik.handleChange}  
+                                    onBlur={formik.handleBlur}  
+                                    value={formik.values.lastName}   
+                                    size={50}   
+                                />  
+                            </div>
                             {formik.touched.lastName && formik.errors.lastName ? (  
                                 <div style={{ color: 'red' }}>{formik.errors.lastName}</div>  
                             ) : null}  
@@ -178,67 +189,81 @@ const SignupForm = ({ onSignUp }) => {
                     </>  
                 )}  
 
-                <div>  
+                <div className='col-12'>  
                     <label htmlFor='email'>Email Address</label>  
-                    <input  
-                      id='email'  
-                      type='email'  
-                      name='email'  
-                      onChange={formik.handleChange}  
-                      onBlur={formik.handleBlur}  
-                      value={formik.values.email}   
-                      size={50}   
-                    />  
+                    <div style={{position: "relative"}}>
+                        <i className="fa-solid fa-envelope signUpIcon"></i>
+                        <input  
+                            id='email'  
+                            type='email'  
+                            name='email'  
+                            onChange={formik.handleChange}  
+                            onBlur={formik.handleBlur}  
+                            value={formik.values.email}   
+                            size={50}   
+                            placeholder='janedoe@example.com'
+                        />  
+                    </div>
                     {formik.touched.email && formik.errors.email ? (  
                         <div style={{ color: 'red' }}>{formik.errors.email}</div>  
                     ) : null}  
                 </div>  
 
-                <div>  
+                <div className='col-12'>  
                     <label htmlFor='telephone'>Telephone</label>  
-                    <input  
-                      id='telephone'  
-                      type='tel'  
-                      name='telephone'  
-                      pattern='[0-9]{4}-[0-9]{3}-[0-9]{3}'
-                      placeholder='Eg; 0712-345-678'
-                      onChange={formik.handleChange}  
-                      onBlur={formik.handleBlur}  
-                      value={formik.values.telephone}   
-                      size={50}   
-                    />  
+                    <div style={{position: "relative"}}>
+                        <i className="fa-solid fa-phone signUpIcon"></i>
+                        <input  
+                            id='telephone'  
+                            type='tel'  
+                            name='telephone'  
+                            pattern='[0-9]{4}-[0-9]{3}-[0-9]{3}'
+                            placeholder='Eg; 0712-345-678'
+                            onChange={formik.handleChange}  
+                            onBlur={formik.handleBlur}  
+                            value={formik.values.telephone}   
+                            size={50}   
+                        />  
+                    </div>
                     {formik.touched.telephone && formik.errors.telephone ? (  
                         <div style={{ color: 'red' }}>{formik.errors.telephone}</div>  
                     ) : null}  
                 </div>  
 
-                <div>  
-                    <label htmlFor='password'>Password</label>  
-                    <input  
-                      id='password'  
-                      type='password'  
-                      name='password'  
-                      onChange={formik.handleChange}  
-                      onBlur={formik.handleBlur}  
-                      value={formik.values.password}   
-                      size={50}  
-                    />  
+                <div className='col-12'>  
+                    <label htmlFor='password'>Password</label> 
+                    <div style={{position: "relative"}}>
+                        <i className="fa-solid fa-lock signUpIcon"></i>
+                        <input  
+                            id='password'  
+                            type='password'  
+                            name='password'  
+                            onChange={formik.handleChange}  
+                            onBlur={formik.handleBlur}  
+                            value={formik.values.password}   
+                            size={50}  
+                        />  
+                    </div> 
+                    <div style={{color: '#999'}}>Password must be at least 8 characters long.</div>
                     {formik.touched.password && formik.errors.password ? (  
                         <div style={{ color: 'red' }}>{formik.errors.password}</div>  
                     ) : null}  
                 </div>  
                 
-                <div>  
+                <div className='col-12'>  
                     <label htmlFor='confirmPassword'>Confirm Password</label>  
-                    <input  
-                      id='confirmPassword'  
-                      type='password'  
-                      name='confirmPassword'  
-                      onChange={formik.handleChange}  
-                      onBlur={formik.handleBlur}  
-                      value={formik.values.confirmPassword}  
-                      size={50}  
-                    />  
+                    <div style={{position: "relative"}}>
+                        <i className="fa-solid fa-unlock signUpIcon"></i>
+                        <input  
+                            id='confirmPassword'  
+                            type='password'  
+                            name='confirmPassword'  
+                            onChange={formik.handleChange}  
+                            onBlur={formik.handleBlur}  
+                            value={formik.values.confirmPassword}  
+                            size={50}  
+                        />  
+                    </div>
                     {formik.touched.confirmPassword && formik.errors.confirmPassword ? (  
                         <div style={{ color: 'red' }}>{formik.errors.confirmPassword}</div>  
                     ) : null}  
@@ -247,11 +272,27 @@ const SignupForm = ({ onSignUp }) => {
                 <input  
                   type='submit'  
                   value={'Sign up'}  
-                  id='signUpSubmit'  
+                  className='signUpSubmit col-md-4'  
                 />   
             </form>  
-            <p>Already have an account?</p>
-            <Link to={"/login"}>Log in</Link> 
+            <h5 
+                className='tinos-regular signUph5'
+                style={{
+                        paddingTop: "50px",
+                        paddingBottom: "1px"
+                }}
+            >
+                Already have an account?
+                <span style={{paddingLeft: '5px'}}>
+                    <Link
+                        to={"/login"}
+                        className="link-offset-2 link-offset-3-hover 
+                                  link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                    >
+                        Log in
+                    </Link> 
+                </span>
+            </h5>
         </div>  
     );  
 };  

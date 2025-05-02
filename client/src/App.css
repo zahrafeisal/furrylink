@@ -1,56 +1,59 @@
-.App {
-  text-align: center;
+/* Font css */
+.satisfy-regular {
+  font-family: "Satisfy", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.praise-regular {
+  font-family: "Praise", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.dancing-script-landingPageh1 {
+  font-family: "Dancing Script";
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.tinos-regular {
+  font-family: "Tinos", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* landing page styles */
 .landingPage {
-  margin-top: 140px;
+  text-align: center;
+  margin-top: 130px;
 }
 
-/* home page styles */
-.home {
-  margin-top: 140px;
+.landingPage h1 {
+  font-size: 7rem;
 }
 
-.home h1, h2 {
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+.landingIcons i {
+  padding-left: 15px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
-.home h1 {
-  font-size: 60px;
+.landingPage button {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  width: 30%;
 }
 
-.signUpPage {
+/* Log in page styles */
+.loginPage {
   margin-top: 100px;
-}
-
-.signUpForm input {
-  border-radius: 10px;
-  padding: 7px;
-  border-width: 1px;
-  font-size: 15px;
   text-align: center;
 }
 
-.signUpForm label {
-  display: block; 
-  margin-top: 25px;
-  margin-bottom: 10px;
-  font-size: 18px;
-}
-
-#signUpSubmit {
-  margin-top: 25px;
-  padding: 8px;
-  cursor: pointer;
-}
-
-#signUpSubmit:hover {
-  background-color: lightgray;
-}
-
-.loginPage {
-  margin-top: 120px;
+.loginPage h2 {
+  padding-bottom: 40px;
 }
 
 .loginForm input {
@@ -58,7 +61,17 @@
   padding: 7px;
   border-width: 1px;
   font-size: 15px;
-  text-align: center;
+  padding-left: 40px;
+}
+
+.loginIcon {
+  position: absolute;
+  top: 50%;
+  left: 530px; /* adjust as needed */
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 15px; /* or your preferred size */
+  pointer-events: none; /* so it doesn't block input interactions */
 }
 
 .loginForm label {
@@ -66,6 +79,7 @@
   margin-top: 25px;
   margin-bottom: 10px;
   font-size: 18px;
+  align-self: flex-end;
 }
 
 #loginSubmit {
@@ -78,22 +92,260 @@
   background-color: lightgray;
 }
 
+/* Sign up page styles */
+.signUpPage {
+  margin-top: 70px;
+  margin-bottom: 30px;
+}
+
+.signUpHeader {
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+.signUpForm {
+  margin-left: 100px;
+}
+
+.signUpIcon {
+  position: absolute;
+  top: 50%;
+  left: 20px; /* adjust as needed */
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 15px; /* or your preferred size */
+  pointer-events: none; /* so it doesn't block input interactions */
+}
+
+.signUpIcon2 {
+  position: absolute;
+  top: 50%;
+  left: 20px; /* adjust as needed */
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 15px; /* or your preferred size */
+  pointer-events: none; /* so it doesn't block input interactions */
+}
+
+.signUpForm input {
+  border-radius: 10px;
+  padding: 7px;
+  border-width: 1px;
+  font-size: 15px;
+  padding-left: 45px;
+}
+
+.signUpForm label {
+  display: block; 
+  margin-top: 25px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.signUpSubmit {
+  margin-top: 35px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.signUph5 {
+  text-align: center;
+}
+
+.signUpSubmit:hover {
+  background-color: lightgray;
+}
+
+/* home page styles */
+.homeHeader {
+  margin-top: 90px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.homeHeader h2 {
+  font-size: 3.5rem;
+}
+
+.homeSearch {
+  text-align: center;
+}
+
+.homeSearch input {
+  margin-left: 5px;
+  border-radius: 10px;
+  padding: 7px;
+  border-width: 1px;
+  font-size: 15px;
+}
+
+.homeCards {
+  display: flex;
+  gap: 30px;
+  margin-top: 70px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.homeCard {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border-width: 5px;
+  background-color: white;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.cardImg {
+  width: 100%; /* or a fixed width, e.g., 200px */
+  height: 300px; /* set to desired fixed height */
+  overflow: hidden; /* hide overflow if any */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* maintains aspect ratio, cropping if needed */
+}
+
+.cardBody {
+  padding-top: 7px;
+  padding-left: 11px;
+}
+
+/* Nav bar styles */
 .navbar {  
   display: flex;  
-  justify-content: space-between;  
-  align-items: center;  
-  padding: 10px;  
-  background-color: #f0f0f0;  
-}  
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 50px;
+  padding-right: 70px;
+  width: 100%;
+  background-color: rgb(215, 215, 193);  
+  z-index: 1000;
+  position: fixed;
+  box-shadow: 0 .5rem 1rem grey;
+  top: 0;
+  right: 0;
+  left: 0;
+} 
 
-.navLogo {  
-  font-weight: bold;  
-}  
-
-.navLinks {  
+.navLogo {
   display: flex;  
-  gap: 15px; 
+  padding-top: 1px;
+  padding-left: 15px;
+}
+
+.navLinks {   
+  display: flex;  
+  gap: 80px; 
 }  
+
+/* User profile styles */
+.profileInfo {
+  margin-left: 90px;
+  font-size: 20px;
+  margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileInfo label {
+  padding-top: 25px;
+  padding-bottom: 15px;
+  color: #999;
+}
+
+.profileInfo input {
+  border-style: none none solid none;
+}
+
+.profileInputs {
+  margin-left: 90px;
+  font-size: 20px;
+  margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profileInputs input {
+  border-radius: 10px;
+  padding: 7px;
+  border-width: 1px;
+}
+
+.profileInputs label {
+  padding-top: 25px;
+  padding-bottom: 15px;
+  color: #999;
+}
+
+.profileButtons {
+  padding-top: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+/* adding pet page */
+.addPet {
+  margin-top: 100px;
+  margin-bottom: 30px;
+}
+
+.addPetForm {
+  margin-left: 250px;
+}
+
+.addPetForm input, textarea {
+  border-radius: 10px;
+  padding: 7px;
+  border-width: 1px;
+  font-size: 15px;
+  padding-left: 15px;
+}
+
+.addPetForm label {
+  display: block; 
+  margin-top: 25px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+/* applications sent details */
+.appDetails {
+  margin-top: 100px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.appDetails h2 {
+  padding-bottom: 50px;
+}
+
+/* review form  */
+.addReview {
+  margin-left: 500px;
+}
+
+.addReview input, textarea {
+  border-radius: 10px;
+  padding: 7px;
+  border-width: 1px;
+  font-size: 15px;
+  padding-left: 15px;
+}
+
+.addReview label {
+  display: block; 
+  margin-top: 25px;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
 
 @keyframes App-logo-spin {
   from {

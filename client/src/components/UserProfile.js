@@ -1,7 +1,4 @@
-// WORKING!
-
-// allows users to view account information
-
+import '../App.css'
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -10,20 +7,24 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
     const [editMode, setEditMode] = useState(false);
     const petsAdded = user.pets_added;
     const [userDetails, setUserDetails] = useState({
-        firstName: user.first_name,
-        lastName: user.last_name,
+        first_name: user.first_name,
+        last_name: user.last_name,
         email: user.email,
-        telephone: user.telephone
+        telephone: user.telephone,
+        organization_name: user.organization_name
     })
 
     useEffect(() => {  
         setUserDetails({  
-            firstName: user.first_name,
-            lastName: user.last_name,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email,  
-            telephone: user.telephone  
+            telephone: user.telephone,
+            organization_name: user.organization_name
         });  
     }, [user]); // Sync userDetails whenever user updates  
+
+    const isOrganization = !!userDetails.organization_name;
     
     function handleEdit() {
         if (user.id) {
@@ -63,10 +64,6 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
         })
     }
 
-    function handlePetClick(id) {
-        navigate(`/pet/${id}`);    // navigate to pet component or edit pet info but idk yet tho i'll see
-    }
-
     function handlePetAdopted(id) {
         // remove from db
         fetch(`/pet/${id}`, {
@@ -101,65 +98,214 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
     }
 
     return (
-        <div>
-            <h1>{`Hello, ${userDetails.email}`}</h1>
-            {/* add click functionality to edit, dynamically turn p's to inputs */}
-            {editMode ? (
-                <>
-                  <label htmlFor="firstName">First name</label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={userDetails.firstName}
-                    readOnly
-                  />
-                  <label htmlFor="lastName">Last name</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={userDetails.lastName}
-                    readOnly
-                  />
-                  <label htmlFor="telephone">Phone Number</label>
-                  <input
-                    type="tel"
-                    id="telephone"
-                    name="telephone"
-                    value={userDetails.telephone}
-                    onChange={handleDeetsChange}
-                  />
-                  <label htmlFor="email">Email Address</label>
-                  <input 
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={userDetails.email}
-                    onChange={handleDeetsChange}
-                  />
-                   <button onClick={handleDeetsSave}>Save</button>  
-                   <button onClick={() => setEditMode(false)}>Cancel</button>
-                </>
-            ) : (
-                <>
-                  <p onClick={handleEdit}>{userDetails.email}</p>
-                </>
-            )}
-            {/* for each loop, create cards for each pet added by user, if any, clickable */}
-            <div>
-                {petsAdded && petsAdded.map((pet) => (
-                    <div key={pet.id}>
-                        <img src={"/uploads/" + pet.image_filename} alt={pet.breed} />
-                        <p>{pet.type}</p>
-                        <p>{pet.breed}</p>
-                        <button onClick={() => handlePetClick(pet.id)}>View more</button>
-                        <button onClick={() => handlePetAdopted(pet.id)}>Adopted</button>
-                    </div>
-                ))}
-            </div>
-            <button onClick={handleLogOut}>Log out</button>
+        <>
+        <div className='homeHeader tinos-regular'>
+            <h1>User Information</h1>
         </div>
+        <div className='tinos-regular'>
+            {/* Edit mode for all info, including organization_name if applicable */}
+            {editMode ? (
+                <div className="profileInputs">
+                    {/* Show name or organization based on user's type */}
+                    {!isOrganization ? (
+                        <>
+                            <label htmlFor="first_name">First name</label>
+                            <input
+                              type="text"
+                              id="first_name"
+                              name="first_name"
+                              value={userDetails.first_name || ""}
+                              onChange={handleDeetsChange}
+                              className="col-sm-3"
+                            />
+
+                            <label htmlFor="last_name">Last name</label>
+                            <input
+                              type="text"
+                              id="last_name"
+                              name="last_name"
+                              value={userDetails.last_name || ""}
+                              onChange={handleDeetsChange}
+                              className="col-sm-3"
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <label htmlFor="organization_name">Organization Name</label>
+                            <input
+                              type="text"
+                              id="organization_name"
+                              name="organization_name"
+                              value={userDetails.organization_name || ""}
+                              onChange={handleDeetsChange}
+                              className="col-sm-3"
+                            />
+                        </>
+                    )}
+
+                    {/* Common fields */}
+                    <label htmlFor="telephone">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="telephone"
+                      name="telephone"
+                      value={userDetails.telephone || ""}
+                      onChange={handleDeetsChange}
+                      className="col-sm-3"
+                    />
+
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={userDetails.email || ""}
+                      onChange={handleDeetsChange}
+                      className="col-sm-3"
+                    />
+
+                    <div className='profileButtons'>
+                        <button
+                          onClick={handleDeetsSave}
+                          type='button'
+                          className='btn btn-primary'
+                        >   
+                            Save
+                        </button>
+                        <button
+                          onClick={() => setEditMode(false)}
+                          type='button'
+                          className='btn btn-secondary'
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <div className="profileInfo">
+                    {/* Show info depending on user type */}
+                    {!isOrganization ? (
+                        <>
+                            <label htmlFor="first_name">First name</label>
+                            <input
+                              type="text"
+                              id="first_name"
+                              name="first_name"
+                              value={userDetails.first_name || ""}
+                              onClick={handleEdit}
+                              readOnly
+                              className="col-sm-3"
+                            />
+
+                            <label htmlFor="last_name">Last name</label>
+                            <input
+                              type="text"
+                              id="last_name"
+                              name="last_name"
+                              value={userDetails.last_name || ""}
+                              onClick={handleEdit}
+                              readOnly
+                              className="col-sm-3"
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <label htmlFor="organization_name">Organization Name</label>
+                            <input
+                              type="text"
+                              id="organization_name"
+                              name="organization_name"
+                              value={userDetails.organization_name || ""}
+                              onClick={handleEdit}
+                              readOnly
+                              className="col-sm-3"
+                            />
+                        </>
+                    )}
+
+                    {/* Common info */}
+                    <label htmlFor="telephone">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="telephone"
+                      name="telephone"
+                      value={userDetails.telephone || ""}
+                      onClick={handleEdit}
+                      readOnly
+                      className="col-sm-3"
+                    />
+
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={userDetails.email || ""}
+                      onClick={handleEdit}
+                      readOnly
+                      className="col-sm-3"
+                    />
+                </div>
+            )}
+            <div style={{
+                textAlign: 'center',
+                paddingTop: '25px'
+            }}>
+                <h1 className='tinos-regular'>Pets posted</h1>
+            </div>
+            <div className='homeCards'>
+                {petsAdded.length === 0 ? (
+                    <p 
+                      style={{paddingTop: '10px', color: 'gray', fontSize: '20px', paddingLeft: '650px'}} 
+                      className='tinos-regular'
+                    >
+                        <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
+                        No posts yet.
+                    </p>
+                ) : (
+                    petsAdded.map((pet) => (
+                    <div key={pet.id} className='homeCard' style={{width: '18rem'}}>
+                        <div className='cardImg'>
+                            <img src={"/uploads/" + pet.image_filename} alt={pet.breed} />
+                        </div>
+                        <div className='cardBody'> 
+                            <h5><strong>{pet.breed}</strong></h5>  
+                            <p>{pet.type}</p>  
+                            <p><small>Ksh. {pet.price}</small></p>
+                            <div style={{
+                                        textAlign: 'center',
+                                        paddingBottom: '10px'
+                                    }}>
+                                <button 
+                                    onClick={() => handlePetAdopted(pet.id)}
+                                    className='btn btn-primary'
+                                >
+                                    Adopted
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )))}
+            </div>
+            <div style={{
+                paddingTop: '40px',
+                textAlign: 'center',
+                paddingBottom: '40px'
+            }}>
+                <button
+                  onClick={handleLogOut}
+                  type="button"
+                  className="btn btn-danger"
+                  style={{
+                    width: '30%',
+                    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)'
+                  }}
+                >
+                    Log out
+                </button>
+            </div>
+        </div>
+        </>
     )
 }
 

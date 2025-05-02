@@ -40,17 +40,30 @@ const ReviewForm = () => {
     return (
         <>
         <Reviews />
-        <form onSubmit={handleReviewSubmit}>
-            <input
-              name="comment"
-              type="text"
-              value={newReview}
-              onChange={handleReviewChange}
+        <div className='signUpHeader'>
+            <h2 className='dancing-script-landingPageh1'><strong>Feel free to leave us a review!</strong></h2>  
+        </div>
+        <form onSubmit={handleReviewSubmit} className="addReview row g-0">
+            <div className='col-md-6'>
+                <textarea
+                  name="comment"
+                  id="comment"
+                  type="text"
+                  value={newReview}
+                  onChange={handleReviewChange}
+                  style={{
+                    width: '100%'
+                  }}
+                />
+                <input
+                type="submit"
+                value='Post review'
+                className='signUpSubmit col-12'
+                style={{
+                    marginBottom: '30px'
+                }}
             />
-            <input
-              type="submit"
-              value={'Add Review'}
-            />
+            </div>
         </form>
         </>
     )

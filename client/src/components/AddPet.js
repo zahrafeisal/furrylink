@@ -79,10 +79,17 @@ function AddPet({ user }) {
     };  
 
     return (  
-        <div>  
-            <h2>Sign up pet for adoption</h2>  
-            <form onSubmit={formik.handleSubmit}>  
-                <div>  
+        <div className="addPet">  
+            <div className='signUpHeader'>
+                <h2 className='dancing-script-landingPageh1'><strong>Looking to give your furry friend new home?</strong></h2>  
+                <p style={{paddingTop: '30px', color: 'gray', fontSize: '18px'}} className='tinos-regular'>
+                    <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
+                    The form below contains your details as per your profile.<br />
+                    If you wish to update this information kindly do so on your personal profile settings.
+                </p>
+            </div>  
+            <form onSubmit={formik.handleSubmit} className="addPetForm row g-0">  
+                <div className='col-md-6'>  
                     <label htmlFor="email">User email</label>  
                     <input  
                         type="text"  
@@ -93,7 +100,7 @@ function AddPet({ user }) {
                         size={30}  
                     />  
                 </div>  
-                <div>  
+                <div className='col-md-6'>  
                     <label htmlFor="telephone">User telephone</label>  
                     <input  
                         type="tel"  
@@ -104,7 +111,7 @@ function AddPet({ user }) {
                         size={30}  
                     />  
                 </div>  
-                <div>  
+                <div className='col-md-6'>  
                     <label htmlFor="animalType">Animal Type</label>  
                     <input  
                         type="text"  
@@ -114,12 +121,13 @@ function AddPet({ user }) {
                         onBlur={formik.handleBlur}  
                         value={formik.values.animalType}  
                         size={30}  
+                        placeholder="Eg; Dog, Cat"
                     />  
                     {formik.touched.animalType && formik.errors.animalType ? (  
                         <div style={{ color: 'red' }}>{formik.errors.animalType}</div>  
                     ) : null}  
                 </div>  
-                <div>  
+                <div className='col-md-6'>  
                     <label htmlFor="breed">Animal Breed</label>  
                     <input  
                         type="text"  
@@ -129,12 +137,13 @@ function AddPet({ user }) {
                         onBlur={formik.handleBlur}  
                         value={formik.values.breed}  
                         size={30}  
+                        placeholder="Eg; German Shepherd"
                     />  
                     {formik.touched.breed && formik.errors.breed ? (  
                         <div style={{ color: 'red' }}>{formik.errors.breed}</div>  
                     ) : null}  
                 </div>  
-                <div>  
+                <div className='col-md-6'>  
                     <label htmlFor="age">Age</label>  
                     <input  
                         type="text"  
@@ -145,11 +154,14 @@ function AddPet({ user }) {
                         value={formik.values.age}  
                         size={30}  
                     />  
+                    <div style={{
+                        color: '#999'
+                    }}>Indicate in years.</div>
                     {formik.touched.age && formik.errors.age ? (  
                         <div style={{ color: 'red' }}>{formik.errors.age}</div>  
                     ) : null}  
                 </div>  
-                <div>  
+                <div className='col-md-6'>  
                     <label htmlFor="price">Price</label>  
                     <input  
                         type="text"  
@@ -164,19 +176,28 @@ function AddPet({ user }) {
                         <div style={{ color: 'red' }}>{formik.errors.price}</div>  
                     ) : null}  
                 </div>  
-                <div>  
-                    <label htmlFor="image_filename">Select image file:</label>  
+                <div className='col-12'>  
+                    <label htmlFor="image_filename">Please provide an image of the pet:</label>  
                     <input  
                         type="file"  
                         name="image_filename"  
                         id="image_filename"  
                         onChange={handleFileChange} // Use the custom handler  
+                        style={{
+                            borderRadius: '10px',
+                            padding: '7px',
+                            borderWidth: '1px'
+                        }}
                     />  
                     {formik.touched.image_filename && formik.errors.image_filename ? (  
                         <div style={{ color: 'red' }}>{formik.errors.image_filename}</div>  
                     ) : null}  
                 </div>  
-                <input type="submit" value="Add pet" />  
+                <input 
+                  type="submit" 
+                  value="Add pet" 
+                  className='signUpSubmit col-md-4'
+                />  
             </form>  
         </div>  
     );  

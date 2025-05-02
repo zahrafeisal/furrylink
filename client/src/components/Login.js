@@ -55,48 +55,70 @@ const LoginForm = ({ onLogin }) => {
 
     return (
         <div className='loginPage'>
-            <h2>Log in to Furry Link</h2>
-            <form onSubmit={formik.handleSubmit} className='loginForm'>  
-            <div>
-                <label htmlFor="email">Email</label>  
-                <input  
-                    id="email"  
-                    name="email"  
-                    type="email"  
-                    onChange={formik.handleChange}  
-                    onBlur={formik.handleBlur}  
-                    value={formik.values.email}
-                    size={30}
-                />  
-                {/* ensure valid email address */}
-                {formik.touched.email && formik.errors.email ? (  
-                    <div style={{ color: 'red' }}>{formik.errors.email}</div>  
-                ) : null}  
-            </div>  
-            <div>  
-                <label htmlFor="password">Password</label>  
-                <input  
-                    id="password"  
-                    name="password"  
-                    type="password"  
-                    onChange={formik.handleChange}  
-                    onBlur={formik.handleBlur}  
-                    value={formik.values.password} 
-                    size={30} 
-                />  
-                {/* ensure valid password */}
-                {formik.touched.password && formik.errors.password ? (  
-                    <div style={{ color: 'red' }}>{formik.errors.password}</div>  
-                ) : null}  
-            </div>  
-            <input
-              id='loginSubmit'
-              type='submit'
-              value={'Log in'}
-            /> 
-        </form> 
-        <p>Don't have an account?</p>
-        <Link to={"/users"}>Sign up</Link> 
+            <div className='loginHeader'>
+                <h2 className='dancing-script-landingPageh1'>Log in to Furrylink</h2>
+            </div>
+            <form onSubmit={formik.handleSubmit} className='tinos-regular loginForm row g-3'> 
+                <div> 
+                    <label htmlFor="email">Email Address</label> 
+                    <div style={{position: "relative"}}>
+                        <i className='fa-solid fa-envelope loginIcon'></i>
+                        <input  
+                          id="email"  
+                          name="email"  
+                          type="email"  
+                          onChange={formik.handleChange}  
+                          onBlur={formik.handleBlur}  
+                          value={formik.values.email}
+                          size={30}
+                          className='col-md-4'
+                        /> 
+                    </div>  
+                </div>
+                <div>  
+                    <label htmlFor="password" className='tinos-regular'>Password</label> 
+                    <div style={{position: "relative"}}>
+                        <i class="fa-solid fa-unlock loginIcon"></i>
+                        <input  
+                          id="password"  
+                          name="password"  
+                          type="password"  
+                          onChange={formik.handleChange}  
+                          onBlur={formik.handleBlur}  
+                          value={formik.values.password} 
+                          size={30}
+                          className='col-md-4' 
+                        />  
+                    </div> 
+                    {/* ensure valid password */}
+                    {formik.touched.password && formik.errors.password ? (  
+                        <div style={{ color: 'red' }}>{formik.errors.password}</div>  
+                    ) : null}  
+                </div>  
+                <div>
+                    <input
+                      id='loginSubmit'
+                      type='submit'
+                      value={'Log in'}
+                      className='col-md-4'
+                    /> 
+                </div>
+            </form> 
+            <h5 className='tinos-regular' style={{
+                paddingTop: "50px",
+                paddingBottom: "1px"
+            }}>
+                Don't have an account?
+                <span style={{paddingLeft: '5px'}}>
+                    <Link
+                      to={"/users"}
+                      className="link-offset-2 link-offset-3-hover 
+                      link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                    >
+                        Sign up
+                    </Link> 
+                </span>
+            </h5>
         </div>
     )
 }
