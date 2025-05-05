@@ -1,9 +1,8 @@
-// WORKING
-
 import React, { useEffect, useState } from 'react';  
 import { useNavigate } from 'react-router-dom';  
+import Navbar from './Navbar';
 
-function Home({ pets }) {  
+function Home({ pets, user }) {  
     const [allPets, setAllPets] = useState(pets);  
     const [filteredPets, setFilteredPets] = useState([]);
     const [userSearch, setUserSearch] = useState("");
@@ -39,11 +38,10 @@ function Home({ pets }) {
     
     return (  
         <>
-        <div className='homeHeader satisfy-regular'>
+        <Navbar user={user}/>
+        <div className='homeHeader dancing-script-landingPageh1'>
             <h2>Explore</h2>
-        </div>
-        <div className="tinos-regular">
-            <form onSubmit={handleSearchSubmit} className='homeSearch'>
+            <form onSubmit={handleSearchSubmit} className='homeSearch poppins-regular'>
                 <input
                   id="search"
                   type="search" 
@@ -51,15 +49,23 @@ function Home({ pets }) {
                   value={userSearch}
                   onChange={handleSearchChange}
                 /> 
-                <input
+                <button
                   type='submit'
-                  value={'Search'}
-                /> 
+                  className='btn signUpbtn'
+                  style={{
+                    marginLeft: '2px'
+                  }}
+                >
+                    <i className="fa-solid fa-magnifying-glass"></i>
+                </button>
             </form>
+        </div>
+        <div className="poppins-regular">
             {filteredPets.length === 0 ? ( 
                 <div style={{
                         textAlign: 'center',
-                        paddingTop: '120px'
+                        paddingTop: '120px',
+                        color: "gray"
                     }}>
                         <i style={{fontSize: '3rem'}} className="fa-solid fa-circle-exclamation"></i>
                         <h5 style={{paddingTop: '20px'}} >No pets available. Please check back later!</h5>  

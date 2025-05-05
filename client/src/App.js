@@ -2,7 +2,6 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/Home';
-import LoginForm from './components/Login';
 import SignupForm from './components/SignUp';
 import LandingPage from './components/LandingPage';
 import UserProfile from './components/UserProfile';
@@ -10,12 +9,13 @@ import Pet from './components/Pet';
 import ReviewForm from './components/ReviewForm';
 import ApplicationForm from './components/ApplicationForm';
 import AddPet from './components/AddPet';
-import Navbar from './components/Navbar';
 import ApplicationsReceived from './components/ApplicationsReceived';
 import ApplicationsSent from './components/ApplicationsSent';
 import AppRcvdDetails from './components/AppRcvdDetails';
 import AppSentDetails from './components/AppSentDetails';
 import Unauthorized from './components/Unauthorized';
+import Login from './components/Login';
+import About from './components/About';
 
 // Protected route component, prevent unauthorized users from accessing
 function PrivateRoute({ children, currentUser, isCheckingAuth }) {
@@ -74,16 +74,23 @@ function App() {
 
     return (
         <Router>
-            {currentUser && <Navbar user={currentUser} />}
             <Routes>
                 {/* Public routes */}
-                <Route path='/' element={<LandingPage />} />
+                <Route path='/' element={<LandingPage onLogin={setCurrentUser} />} />
+                <Route path='/about' element={<About />} />
                 <Route path='/users' element={<SignupForm onSignUp={setCurrentUser} />} />
-                <Route path='/login' element={<LoginForm onLogin={setCurrentUser} />} />
-                <Route path='/home' element={<Home pets={pets} />} />
+                <Route path='/login' element={<Login onLogin={setCurrentUser} />} />
                 <Route path='/unauthorized' element={<Unauthorized />} />
 
                 {/* Protected routes */}
+                <Route
+                    path='/home'
+                    element={
+                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
+                            <Home pets={pets} user={currentUser} />
+                        </PrivateRoute>
+                    }
+                />
                 <Route
                     path='/user/:id'
                     element={

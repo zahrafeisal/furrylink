@@ -5,6 +5,7 @@ This is a platform that allows users to sign up pets for adoption, view pets tha
 
 ## Key Features
 <ul>
+    <li>Session-based User Authentication</li>
 </ul>
 
 ## Setup amd Installation
