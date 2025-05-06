@@ -82,7 +82,7 @@ function LandingPage({ onLogin }) {
                 <div 
                   style={{
                       position: 'absolute',
-                      top: '30%',
+                      top: '60%',
                       display: 'flex'
                     }}
                 >

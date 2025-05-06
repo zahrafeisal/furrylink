@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useFormik } from 'formik';  
 import * as Yup from 'yup';  
+import Navbar from "./Navbar";
 
 
 const ApplicationForm = ({ currentUser }) => {
@@ -74,21 +75,23 @@ const ApplicationForm = ({ currentUser }) => {
 
     useEffect(() => {  
         if (pet) {  
-            formik.setFieldValue('animalShelter', pet.user.animal_shelter === 1 ? "Yes" : "No");  
+            formik.setFieldValue('animalShelter', pet.user.animal_shelter ? "Yes" : "No");  
         }  
     }, [pet]);  
 
     return (
+        <>
+        <Navbar user={currentUser} />
         <div className="addPet">
             <div className='signUpHeader'>
                 <h2 className='dancing-script-landingPageh1'><strong>Ready to adopt a pet?</strong></h2>  
-                <p style={{paddingTop: '30px', color: 'gray', fontSize: '18px'}} className='tinos-regular'>
+                <p style={{paddingTop: '30px', color: 'gray', fontSize: '13px'}} className='poppins-regular'>
                     <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
                     The form below contains your details as per your profile.<br />
                     If you wish to update this information kindly do so on your personal profile settings.
                 </p>
             </div>  
-            <form onSubmit={formik.handleSubmit} className="addPetForm row g-0 tinos-regular">
+            <form onSubmit={formik.handleSubmit} className="addPetForm row g-0 poppins-regular">
                 <div className="col-md-6">
                     {/* all inputs readonly */}
                     <h3><strong>Pet's details</strong></h3>
@@ -217,6 +220,7 @@ const ApplicationForm = ({ currentUser }) => {
                 />  
             </form>
         </div>
+        </>
     )
 }
 export default ApplicationForm;

@@ -1,6 +1,7 @@
 import '../App.css'
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import Navbar from './Navbar';
 
 function UserProfile({ user, setUpdatedUser, fetchUser }) {
     const navigate = useNavigate();
@@ -99,10 +100,11 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
 
     return (
         <>
-        <div className='homeHeader tinos-regular'>
+        <Navbar user={user} />
+        <div className='homeHeader poppins-regular'>
             <h1>User Information</h1>
         </div>
-        <div className='tinos-regular'>
+        <div className='poppins-regular'>
             {/* Edit mode for all info, including organization_name if applicable */}
             {editMode ? (
                 <div className="profileInputs">
@@ -251,7 +253,7 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
                 textAlign: 'center',
                 paddingTop: '25px'
             }}>
-                <h1 className='tinos-regular'>Pets posted</h1>
+                <h1 className='poppins-regular'>Pets posted</h1>
             </div>
             <div className='homeCards'>
                 {petsAdded.length === 0 ? (

@@ -290,41 +290,54 @@
 
 .homeCards {
   display: flex;
-  gap: 30px;
+  flex-direction: column;
+  gap: 15px;
   margin-top: 70px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 250px;
+  margin-right: 20px;
+  margin-bottom: 40px;
 }
 
 .homeCard {
   display: flex;
-  flex-direction: column;
   border-radius: 10px;
   border-width: 5px;
-  background-color: white;
+  background-color: whitesmoke;
   overflow: hidden;
-  cursor: pointer;
-  font-size: 20px;
+  height: 20rem;
+  width: 60rem;
 }
 
 .cardImg {
-  width: 100%; /* or a fixed width, e.g., 200px */
-  height: 300px; /* set to desired fixed height */
-  overflow: hidden; /* hide overflow if any */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 50%; 
+  height: 100%; 
+  overflow: hidden;
 }
 
 .cardImg img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* maintains aspect ratio, cropping if needed */
+  object-fit: cover; 
 }
 
 .cardBody {
-  padding-top: 7px;
-  padding-left: 11px;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+
+.cardBody h6 {
+  margin-bottom: 20px;
+}
+
+.applyLink {
+  bottom: 0;
+  margin-top: 45px;
+  cursor: pointer;
+  color: rgb(1, 77, 124);
+}
+
+.applyLink:hover {
+  color: rgb(2, 126, 203)
 }
 
 /* Nav bar styles */
@@ -333,15 +346,15 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 50px;
-  z-index: 1000;
+  height: 60px;
+  z-index: 1050;
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  padding: 15px;
+  /* padding: 30px; */
   background-color: white;
-  padding-top: 25px;
+  padding-top: 10px;
 } 
 
 .navLogo {
@@ -374,9 +387,8 @@
 }
 
 .navLink2 {
-  padding-right: 7rem;
-  padding-top: .5px;
-  font-size: 1.9rem;
+  padding-right: 9rem;
+  font-size: 2rem;
 }
 
 .navLinks a i {

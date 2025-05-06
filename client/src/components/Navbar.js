@@ -31,7 +31,7 @@ function Navbar({ user }) {
                 <div className="navLink2">
                     <NavLink to={`/user/${user.id}`}>
                         <i className="fa-regular fa-circle-user" style={{color: "black"}}></i>
-                    </NavLink>      {/* link to UserProfile */}
+                    </NavLink>     
                 </div>
             </nav>
         )

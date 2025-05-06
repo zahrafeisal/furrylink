@@ -36,8 +36,7 @@ const LoginForm = ({ onLogin }) => {
             })
             .then((response) => {
                 if (response.ok) {
-                    resetForm();   // clear input fields
-                    alert("Log in successful!");
+                    resetForm();   // clear input field
                     navigate("/home")    // navigate to Home
                     return response.json();
                 } else {

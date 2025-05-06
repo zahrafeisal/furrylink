@@ -5,7 +5,6 @@ import Home from './components/Home';
 import SignupForm from './components/SignUp';
 import LandingPage from './components/LandingPage';
 import UserProfile from './components/UserProfile';
-import Pet from './components/Pet';
 import ReviewForm from './components/ReviewForm';
 import ApplicationForm from './components/ApplicationForm';
 import AddPet from './components/AddPet';
@@ -112,14 +111,6 @@ function App() {
                     element={
                         <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
                             <ReviewForm user={currentUser} />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path='/pet/:id'
-                    element={
-                        <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
-                            <Pet />
                         </PrivateRoute>
                     }
                 />
