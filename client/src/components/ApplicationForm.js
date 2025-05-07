@@ -59,6 +59,7 @@ const ApplicationForm = ({ currentUser }) => {
                 }
             })
             .then((application) => {
+                navigate("/home")
                 console.log(application)
             })
             .catch((error) => {
@@ -95,6 +96,9 @@ const ApplicationForm = ({ currentUser }) => {
                 <div className="col-md-6">
                     {/* all inputs readonly */}
                     <h3><strong>Pet's details</strong></h3>
+                    <div >
+                      <img style={{width: '35%', height: '25%', borderRadius: '10px'}} src={pet.image_filename} />
+                    </div>
                     <label htmlFor="petType">Type</label>
                     <input
                       type="text"
@@ -102,6 +106,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="petType"
                       value={formik.values.petType}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="petBreed">Breed</label>
                     <input
@@ -110,6 +115,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="petBreed"
                       value={formik.values.petBreed}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="petAge">Age</label>
                     <input
@@ -118,6 +124,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="petAge"
                       value={formik.values.petAge}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="petPrice">Price</label>
                     <input
@@ -126,6 +133,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="petPrice"
                       value={formik.values.petPrice}
                       readOnly
+                      size={40}
                     />
                 </div>
                 <div className="col-md-6">
@@ -138,6 +146,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="ownerName"
                       value={formik.values.ownerName}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="ownerEmail">Email Address</label>
                     <input
@@ -146,6 +155,7 @@ const ApplicationForm = ({ currentUser }) => {
                       id="ownerEmail"
                       value={formik.values.ownerEmail}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="ownerTelephone">Phone Number</label>
                     <input
@@ -154,6 +164,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="ownerTelephone"
                       value={formik.values.ownerTelephone}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="animalShelter">Registered Animal Shelter</label>
                     <input
@@ -162,6 +173,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="animalShelter"
                       value={formik.values.animalShelter}
                       readOnly
+                      size={40}
                     />
                 </div>
                 <div className="col-12" style={{
@@ -176,6 +188,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="userName"
                       value={formik.values.userName}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="userEmail">Email Address</label>
                     <input
@@ -184,6 +197,7 @@ const ApplicationForm = ({ currentUser }) => {
                       id="userEmail"
                       value={formik.values.userEmail}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="userTelephone">Phone Number</label>
                     <input
@@ -192,6 +206,7 @@ const ApplicationForm = ({ currentUser }) => {
                       name="userTelephone"
                       value={formik.values.ownerTelephone}
                       readOnly
+                      size={40}
                     />
                     <label htmlFor="description">Description</label>
                     <textarea
@@ -213,7 +228,7 @@ const ApplicationForm = ({ currentUser }) => {
                 <input 
                   type="submit" 
                   value="Send Application" 
-                  className='signUpSubmit col-md-4'
+                  className='signUpSubmit col-md-4 btn btn-primary'
                   style={{
                     marginTop: '12rem'
                   }}

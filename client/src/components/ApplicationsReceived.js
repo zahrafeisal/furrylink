@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import Navbar from './Navbar';
 
 function ApplicationsReceived({ user }) {
     const navigate = useNavigate();
@@ -35,17 +36,29 @@ function ApplicationsReceived({ user }) {
     }
 
     return (
-        <div className='addPet'>
-            <div className='signUpHeader'>
-                <h2 className='tinos-regular'><strong>Received Applications</strong></h2>  
+        <>
+        <Navbar user={user} />
+        {!user.animal_shelter ? (
+            <nav className='logOutNav poppins-regular' style={{paddingLeft: '30px', paddingTop: '20px'}} >
+                <Link to={'/sent-applications'} style={{width: '100px'}} className='btn btn-primary' >Sent</Link>
+                <Link to={'/pet-applications'} className='btn btn-secondary'>Received</Link>
+            </nav> 
+        ) : null}
+        <div className='addPet poppins-regular'>
+            <div style={{
+                textAlign: 'center',
+                paddingTop: '30px',
+                paddingBottom: '30px'
+            }} className='poppins-regular'>
+                <h2>Received Applications</h2>  
             </div>  
             {appsReceived.length === 0 ? (
                 <p 
                   style={{paddingTop: '150px', color: 'gray', fontSize: '20px', textAlign: 'center'}} 
-                  className='tinos-regular'
+                  className='poppins-regular'
                 >
                     <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
-                    You haven't received any applications.
+                    You haven't received any applications yet.
                 </p>
             ) : (
                 appsReceived.map(app => (
@@ -55,25 +68,31 @@ function ApplicationsReceived({ user }) {
                         margin: '10px',
                         padding: '10px',
                         cursor: 'pointer',
-                        marginLeft: '360px',
-                        marginRight: '360px'
+                        marginLeft: '300px',
+                        marginRight: '300px'
                       }}
                       onClick={() => handleApplicationClick(app)}
                     >
                         <div className='card-header'>
                             From: 
                             <i className="fa-solid fa-envelope" style={{color: '#999', paddingRight: '5px', paddingLeft: '10px'}}></i>
-                            {app.user.email}
+                            {app.user.email}{' '}
+                            ({app.user?.animal_shelter 
+                            ? `${app.user.organization_name ?? 'N/A'}`
+                            : `${app.user?.first_name ?? ''} ${app.user?.last_name ?? ''}`.trim()
+                            })
                         </div>
                         <div className='card-body'>
-                            <h5 className='card-title'>{app.pet.breed} ({app.pet.type})</h5>
-                            <p className='card-text'><small>{app.status}</small></p>
+                            <h5 className='card-title'><strong>{app.pet.breed} ({app.pet.type})</strong></h5>
+                            {app.status === 'Approved' && <p className='card-text'><small>Status:</small><small style={{color: 'green'}}> {app.status}</small></p>}
+                            {app.status === 'Rejected' && <p className='card-text'><small>Status:</small><small style={{color: 'red'}}> {app.status}</small></p>}
+                            {app.status === 'Pending' && <p className='card-text'><small>Status:</small><small style={{color: '#999'}}> {app.status}</small></p>}
                         </div>
-
                     </div>
                 ))
             )}
         </div>
+        </>
     )
 }
 

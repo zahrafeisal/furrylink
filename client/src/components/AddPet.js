@@ -1,9 +1,8 @@
-// WORKINGGGGG
-
 import { useFormik } from "formik";  
 import * as Yup from "yup";  
 import React, { useEffect } from "react";  
 import { useNavigate } from "react-router";
+import Navbar from "./Navbar";
 
 function AddPet({ user }) {  
     const navigate = useNavigate();
@@ -79,18 +78,20 @@ function AddPet({ user }) {
     };  
 
     return (  
+        <>
+        <Navbar user={user} />
         <div className="addPet">  
             <div className='signUpHeader'>
-                <h2 className='dancing-script-landingPageh1'><strong>Looking to give your furry friend new home?</strong></h2>  
-                <p style={{paddingTop: '30px', color: 'gray', fontSize: '18px'}} className='tinos-regular'>
+                <h2 className='dancing-script-landingPageh1'><strong>Looking to give your pet a new home?</strong></h2>  
+                <p style={{paddingTop: '30px', color: 'gray', fontSize: '13px'}} className='poppins-regular'>
                     <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
                     The form below contains your details as per your profile.<br />
                     If you wish to update this information kindly do so on your personal profile settings.
                 </p>
             </div>  
-            <form onSubmit={formik.handleSubmit} className="addPetForm row g-0">  
+            <form onSubmit={formik.handleSubmit} className="addPetForm row g-0 poppins-regular">  
                 <div className='col-md-6'>  
-                    <label htmlFor="email">User email</label>  
+                    <label htmlFor="email">Email Address</label>  
                     <input  
                         type="text"  
                         name="email"  
@@ -101,7 +102,7 @@ function AddPet({ user }) {
                     />  
                 </div>  
                 <div className='col-md-6'>  
-                    <label htmlFor="telephone">User telephone</label>  
+                    <label htmlFor="telephone">Telephone</label>  
                     <input  
                         type="tel"  
                         id="telephone"
@@ -144,7 +145,7 @@ function AddPet({ user }) {
                     ) : null}  
                 </div>  
                 <div className='col-md-6'>  
-                    <label htmlFor="age">Age</label>  
+                    <label htmlFor="age">Animal Age</label>  
                     <input  
                         type="text"  
                         name="age"  
@@ -177,7 +178,7 @@ function AddPet({ user }) {
                     ) : null}  
                 </div>  
                 <div className='col-12'>  
-                    <label htmlFor="image_filename">Please provide an image of the pet:</label>  
+                    <label htmlFor="image_filename">Please provide a clear image of the pet</label>  
                     <input  
                         type="file"  
                         name="image_filename"  
@@ -196,10 +197,11 @@ function AddPet({ user }) {
                 <input 
                   type="submit" 
                   value="Add pet" 
-                  className='signUpSubmit col-md-4'
+                  className='signUpSubmit col-md-4 btn btn-primary'
                 />  
             </form>  
         </div>  
+        </>
     );  
 }  
 

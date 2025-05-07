@@ -142,7 +142,7 @@ function App() {
                     path='/pet-application/:id'
                     element={
                         <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
-                            <AppRcvdDetails />
+                            <AppRcvdDetails user={currentUser} />
                         </PrivateRoute>
                     }
                 />
@@ -150,7 +150,7 @@ function App() {
                     path='/sent-application/:id'
                     element={
                         <PrivateRoute currentUser={currentUser} isCheckingAuth={isCheckingAuth}>
-                            <AppSentDetails />
+                            <AppSentDetails user={currentUser} />
                         </PrivateRoute>
                     }
                 />

@@ -400,48 +400,72 @@
 }
 
 /* User profile styles */
+.logOutNav {
+  margin-top: 60px;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 300px;
+  position: fixed;
+  z-index: 800;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  color: black;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.logOutNav div:hover {
+  color: rgb(2, 126, 203);
+}
+
+.logOutNav a {
+  text-decoration: none;
+  margin-left: 10px;
+  /* font-size: 1.2rem; */
+}
+
+
 .profileInfo {
-  margin-left: 90px;
-  font-size: 20px;
-  margin-right: 50px;
+  margin-left: 25%;
+  font-size: 18px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 55px;
+  margin-top: 40px;
+}
+
+.profileInfoDiv {
+  display: flex;
+  margin-top: 30px;
 }
 
 .profileInfo label {
-  padding-top: 25px;
-  padding-bottom: 15px;
   color: #999;
+}
+
+.labelDiv {
+  width: 210px;
 }
 
 .profileInfo input {
+  padding-left: 13px;
+  outline: none;
+  border-style: none none solid none;
+  border-color: #999;
+}
+
+.profileInfo input:focus {
+  outline: none;
   border-style: none none solid none;
 }
 
-.profileInputs {
-  margin-left: 90px;
-  font-size: 20px;
-  margin-right: 50px;
-  display: flex;
-  flex-direction: column;
-}
-
-.profileInputs input {
-  border-radius: 10px;
-  padding: 7px;
-  border-width: 1px;
-}
-
-.profileInputs label {
-  padding-top: 25px;
-  padding-bottom: 15px;
-  color: #999;
-}
-
 .profileButtons {
+  margin-left: 210px;
   padding-top: 30px;
   display: flex;
-  gap: 20px;
+  gap: 10px;
 }
 
 /* adding pet page */
@@ -474,6 +498,18 @@
   margin-top: 100px;
   margin-bottom: 30px;
   text-align: center;
+}
+
+.appImg {
+  margin-left: 25%;
+  width: 50%;
+  height: 20rem;
+}
+
+.appImg img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
 }
 
 .appDetails h2 {
