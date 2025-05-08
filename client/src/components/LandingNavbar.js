@@ -10,7 +10,6 @@ function LandingNavbar() {
             <div className='landingNavlinks'>
                 <NavLink to={"/"}>Home</NavLink>
                 <NavLink to={"/about"}>About</NavLink>
-                <NavLink to={"/support"}>Support</NavLink>
             </div>
             <div className='landingNavlinks2'>
                 <NavLink className={'btn btn-primary'} to={"/login"}>Log in</NavLink>

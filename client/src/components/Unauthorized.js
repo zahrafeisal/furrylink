@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
+import LandingNavbar from "./LandingNavbar";
 
 function Unauthorized() {
     return (
+        <>
+        <LandingNavbar />
         <div style={{
             marginTop: "200px",
             textAlign: 'center'
@@ -36,6 +39,7 @@ function Unauthorized() {
                             </span>
                         </h5>
         </div>
+        </>
     )
 }
 

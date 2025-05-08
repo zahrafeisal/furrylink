@@ -20,7 +20,7 @@ function ApplicationsSent({ currentUser }) {
         {!currentUser.animal_shelter ? (
             <nav className='logOutNav poppins-regular' style={{paddingLeft: '30px', paddingTop: '20px'}} >
                 <Link to={'/sent-applications'} style={{width: '100px'}} className='btn btn-primary' >Sent</Link>
-                <Link to={'/pet-applications'} className='btn btn-secondary'>Received</Link>
+                <Link to={'/pet-applications'}style={{width: '100px', color: 'black'}} className='btn btn-outline-light'>Received</Link>
             </nav> 
         ) : null}
         <div className='addPet poppins-regular'>

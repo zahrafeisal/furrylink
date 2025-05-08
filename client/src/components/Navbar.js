@@ -23,6 +23,10 @@ function Navbar({ user }) {
                         <i className="fa-solid fa-inbox" style={{color: "black"}}></i>
                         <small>Inbox</small>
                     </NavLink>
+                    <NavLink to={'/reviews'} className={'navLink link-offset-2 link-underline link-underline-opacity-0'}>
+                        <i className="fa-solid fa-phone" style={{color: "black"}}></i>
+                        <small>Support</small>
+                    </NavLink>
                 </div>
                 <div className="navLink2">
                     <NavLink to={`/user/${user.id}`}>

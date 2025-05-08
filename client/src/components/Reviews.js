@@ -21,30 +21,34 @@ function Reviews() {
     }, [])
 
     return (
-        <div className="addPet">
-            <div className='signUpHeader'>
-                <h2 className='tinos-regular'><strong>Reviews</strong></h2>  
-            </div>  
+        <div className="addPet poppins-regular">
+           <div className='aboutHeaders' style={{marginBottom: '50px' }}>
+                <h4 style={{ display: 'inline-block', margin: 0 }}>Our Reviews</h4>
+                <div style={{
+                    margin: '8px auto 0',
+                    width: '150px',
+                    borderBottom: '3px solid maroon'
+                }}></div>
+            </div>
             {reviews.length === 0 ? (
                 <p 
                     style={{paddingTop: '10px', color: 'gray', fontSize: '20px', paddingLeft: '650px'}} 
-                    className='tinos-regular'
+                    className='poppins-regular'
                 >
                   <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
                   No reviews yet. Please check back later!
                 </p>
             ) : (
-                reviews.map(review => (
+                <div>
+                    {reviews.map(review => (
                     <div 
                       key={review.id}
                       className="card"
                       style={{
-                        border: '1px solid black',
-                        margin: '10px',
+                        border: '1px solid #999',
                         padding: '10px',
-                        cursor: 'pointer',
-                        marginLeft: '360px',
-                        marginRight: '360px'
+                        marginLeft: '300px',
+                        marginRight: '300px'
                       }}>
                         <div className="card-header">
                             <i className="fa-solid fa-user" style={{color: '#999', paddingRight: '10px', paddingLeft: '10px'}}></i>
@@ -53,11 +57,12 @@ function Reviews() {
                         <div className="card-body">
                         <p className="card-text">{review.comment}</p> 
                         </div>
-                        <div className="card-footer">
-                            <p>Posted {new Date(review.date).toLocaleDateString()}</p>
+                        <div className="card-footer" style={{backgroundColor: 'white', color: '#999', paddingBottom: '0'}} >
+                            <p>{new Date(review.date).toLocaleDateString()}</p>
                         </div>
                     </div>
-                ))
+                ))}
+                </div>
             )}
         </div>
     );

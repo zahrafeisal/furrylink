@@ -142,6 +142,7 @@ function LandingPage({ onLogin }) {
                         <li>Email</li>
                         <li>Twitter</li>
                         <li>LinkedIn</li>
+                        <li>Telephone</li>
                     </ul>
                 </div>
             </div>

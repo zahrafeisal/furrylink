@@ -268,13 +268,6 @@ const SignupForm = ({ onSignUp }) => {
                         <div style={{ color: 'red', paddingTop: '3px', fontSize: '.9rem' }}>{formik.errors.confirmPassword}</div>  
                     ) : null}  
                 </div>  
-                {/* <div>
-                    <input  
-                        type='submit'  
-                        value={'Sign up'}  
-                        className='signUpSubmit btn btn-primary'  
-                    />     
-                </div> */}
                 <div>
                     <button
                       type='submit'
