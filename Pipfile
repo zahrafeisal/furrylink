@@ -13,6 +13,9 @@ python-dotenv = "*"
 flask-bcrypt = "*"
 honcho = "*"
 sqlalchemy-serializer = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
+flask-session = "*"
 
 [dev-packages]
 

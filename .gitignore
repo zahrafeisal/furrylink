@@ -1,2 +1,5 @@
 # prevent secret key from being pushed to github
-.env 
+/client/.env
+/server/.env
+/client/.git
+/server/.git

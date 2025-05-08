@@ -3,6 +3,8 @@ import { useLocation } from "react-router";
 import Navbar from "./Navbar";
 
 function AppRcvdDetails({ user }) {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const location = useLocation();
     const applicationData = location.state?.app;
 
@@ -14,8 +16,9 @@ function AppRcvdDetails({ user }) {
     }
 
     function handleStatusChange(applicationId, newStatus) {
-        fetch(`/application/${applicationId}`, {
+        fetch(`${API_BASE}/application/${applicationId}`, {
             method: 'PATCH',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -65,7 +68,7 @@ function AppRcvdDetails({ user }) {
                 </div>
                 <div className="card-body">
                     <div className='appImg'>
-                        <img src={"/uploads/" + application.pet.image_filename} alt={application.pet.breed} />
+                        <img src={`https://furrylink-backend.onrender.com/uploads/${application.pet.image_filename}`} alt={application.pet.breed} />
                     </div>
                     <h4 style={{paddingBottom: '10px', paddingTop: '10px'}} className='card-title'>{application.pet?.breed ?? 'N/A'} ({application.pet?.type ?? 'N/A'})</h4>
                     <p><strong>Age: </strong>{application.pet.age} yrs.</p>

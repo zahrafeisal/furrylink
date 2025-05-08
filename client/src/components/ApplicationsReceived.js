@@ -3,11 +3,15 @@ import { Link, useNavigate } from 'react-router';
 import Navbar from './Navbar';
 
 function ApplicationsReceived({ user }) {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const navigate = useNavigate();
     const [allApplications, setAllApplications] = useState([]);
 
     const fetchApps = () => {
-        fetch("/applications")
+        fetch(`${API_BASE}/applications`, {
+            credentials: 'include',
+        })
         .then((response) => {
             if (response.ok) {
                 return response.json()

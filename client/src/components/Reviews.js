@@ -2,10 +2,14 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 function Reviews() {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-            fetch("/reviews")
+            fetch(`${API_BASE}/reviews`, {
+                credentials: 'include',
+            })
             .then((response) => {
                 if (response.ok) {
                     return response.json();

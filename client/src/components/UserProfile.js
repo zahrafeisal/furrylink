@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import Navbar from './Navbar';
 
 function UserProfile({ user, setUpdatedUser, fetchUser }) {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
     const petsAdded = user.pets_added;
@@ -42,8 +44,9 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
     }
 
     function handleDeetsSave() {
-        fetch(`/user/${user.id}`, {
+        fetch(`${API_BASE}/user/${user.id}`, {
             method: "PATCH",
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json"
             },
@@ -67,8 +70,9 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
 
     function handlePetAdopted(id) {
         // remove from db
-        fetch(`/pet/${id}`, {
+        fetch(`${API_BASE}/pet/${id}`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json"
             }
@@ -85,8 +89,9 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
     }
 
     function handleLogOut() {
-        fetch("/logout", {
-            method: "DELETE"
+        fetch(`${API_BASE}/logout`, {
+            method: "DELETE",
+            credentials: 'include'
         })
         .then((response) => {
             if (response.ok) {
@@ -341,7 +346,7 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
                     petsAdded.map((pet) => (
                     <div key={pet.id} className='homeCard' style={{width: '40rem', height: '15rem'}}>
                         <div className='cardImg'>
-                            <img src={"/uploads/" + pet.image_filename} alt={pet.breed} />
+                            <img src={`https://furrylink-backend.onrender.com/uploads/${pet.image_filename}`} alt={pet.breed} />
                         </div>
                         <div className='cardBody' style={{marginLeft: '10px'}}> 
                             <h6>{pet.breed} {pet.type}</h6>    

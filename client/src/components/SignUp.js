@@ -7,6 +7,8 @@ import "../App.css";
 import { Link, useNavigate } from 'react-router';
 
 const SignupForm = ({ onSignUp }) => { 
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const navigate = useNavigate();
     
     const [isAnimalShelter, setIsAnimalShelter] = useState(false); // determine user type  
@@ -63,8 +65,9 @@ const SignupForm = ({ onSignUp }) => {
             };  
             console.log(data);  
             // Send to your API database  
-            fetch("/users", {
+            fetch(`${API_BASE}/users`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'

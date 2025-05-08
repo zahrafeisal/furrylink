@@ -77,7 +77,7 @@ function Home({ pets, user }) {
                             >
                                 <div className='cardImg'>
                                     <img
-                                      src={pet.image_filename}
+                                      src={`https://furrylink-backend.onrender.com/${pet.image_filename}`}
                                       alt={pet.breed}
                                     />
                                 </div>

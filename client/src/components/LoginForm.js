@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router";
 
 const LoginForm = ({ onLogin }) => {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const navigate = useNavigate();
 
     const validationSchema = Yup.object({
@@ -26,8 +28,9 @@ const LoginForm = ({ onLogin }) => {
         onSubmit: (values, { resetForm }) => {
             console.log(values)
             // API functionality
-            fetch("/login", {
+            fetch(`${API_BASE}/login`, {
                 method: "POST",
+                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"

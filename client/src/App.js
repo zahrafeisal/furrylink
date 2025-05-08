@@ -25,6 +25,8 @@ function PrivateRoute({ children, currentUser, isCheckingAuth }) {
 }
 
 function App() {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const [currentUser, setCurrentUser] = useState(null);
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [pets, setPets] = useState([]);
@@ -32,7 +34,9 @@ function App() {
     // Function to fetch the latest user data
     const fetchCurrentUser = () => {
         setIsCheckingAuth(true);
-        fetch("/check_session")
+        fetch(`${API_BASE}/check_session`, {
+            credentials: 'include',
+        })
         .then((response) => {
             if (response.ok) {
                 return response.json();
@@ -46,6 +50,7 @@ function App() {
         })
         .catch((error) => {
             console.log(error.message);
+            setIsCheckingAuth(false);
         });
     };
 
@@ -56,7 +61,9 @@ function App() {
 
     // Fetch pets data on initial load
     useEffect(() => {
-        fetch("/pets")
+        fetch(`${API_BASE}/pets`, {
+            credentials: 'include',
+        })
         .then((response) => {
             if (response.ok) {
                 return response.json();

@@ -7,6 +7,8 @@ import Navbar from "./Navbar";
 
 
 const ApplicationForm = ({ currentUser }) => {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const navigate = useNavigate();
     const location = useLocation();
     const pet = location.state?.pet;    // access data from state in pet card when navigated from home
@@ -17,22 +19,22 @@ const ApplicationForm = ({ currentUser }) => {
 
     const formik = useFormik({
         initialValues: {
-          petType: pet?.type || "",  
-          petBreed: pet?.breed || "",  
-          petAge: pet?.age || "",  
-          petPrice: pet?.price || "",  
-          ownerName: pet?.user?.animal_shelter 
+            petType: pet?.type || "",  
+            petBreed: pet?.breed || "",  
+            petAge: pet?.age || "",  
+            petPrice: pet?.price || "",  
+            ownerName: pet?.user?.animal_shelter 
             ? pet?.user?.organization_name || "" 
             : (pet?.user?.first_name && pet?.user?.last_name ? `${pet?.user?.first_name} ${pet?.user?.last_name}` : ""),
-          ownerEmail: pet?.user?.email || "",  
-          ownerTelephone: pet?.user?.telephone || "",  
-          animalShelter: pet?.user?.animal_shelter || "",  
-          userName: currentUser?.animal_shelter 
+            ownerEmail: pet?.user?.email || "",  
+            ownerTelephone: pet?.user?.telephone || "",  
+            animalShelter: pet?.user?.animal_shelter || "",  
+            userName: currentUser?.animal_shelter 
             ? currentUser?.organization_name || "" 
             : (currentUser?.first_name && currentUser?.last_name ? `${currentUser?.first_name} ${currentUser?.last_name}` : ""),  
-          userEmail: currentUser?.email || "",  
-          userTelephone: currentUser?.telephone || "",  
-          description: ""  
+            userEmail: currentUser?.email || "",  
+            userTelephone: currentUser?.telephone || "",  
+            description: ""  
         },
         validationSchema,
         onSubmit: (values, { resetForm }) => {
@@ -42,8 +44,9 @@ const ApplicationForm = ({ currentUser }) => {
                 petID: pet?.id
             }
 
-            fetch("/applications", {
+            fetch(`${API_BASE}/applications`, {
                 method: "POST",
+                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
@@ -97,7 +100,7 @@ const ApplicationForm = ({ currentUser }) => {
                     {/* all inputs readonly */}
                     <h3><strong>Pet's details</strong></h3>
                     <div >
-                      <img style={{width: '35%', height: '25%', borderRadius: '10px'}} src={pet.image_filename} />
+                      <img style={{width: '35%', height: '25%', borderRadius: '10px'}} src={`https://furrylink-backend.onrender.com/${pet.image_filename}`} />
                     </div>
                     <label htmlFor="petType">Type</label>
                     <input

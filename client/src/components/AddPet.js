@@ -4,7 +4,9 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "./Navbar";
 
-function AddPet({ user }) {  
+function AddPet({ user }) { 
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const navigate = useNavigate();
     const MAX_FILE_SIZE = 16 * 1024 * 1024; 
 
@@ -42,8 +44,9 @@ function AddPet({ user }) {
                 formData.append(key, values[key]);  
             });  
 
-            fetch("/pets", {
+            fetch(`${API_BASE}/pets`, {
                 method: "POST",
+                credentials: 'include',
                 body: formData
             })
             .then((response) => {

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Navbar from "./Navbar";
 
 const ReviewForm = ({ user }) => {
+    const API_BASE = process.env.REACT_APP_API_URL;
+
     const [newReview, setNewReview] = useState(null);
 
     function handleReviewChange(e) {
@@ -13,8 +15,9 @@ const ReviewForm = ({ user }) => {
     function handleReviewSubmit(e) {
         // e.preventDefault();
 
-        fetch("/reviews", {
+        fetch(`${API_BASE}/reviews`, {
             method: "POST",
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
