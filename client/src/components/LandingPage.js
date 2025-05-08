@@ -1,7 +1,6 @@
 import '../App.css';
 import React from "react";
-import { Link, NavLink } from "react-router";
-import Reviews from "./Reviews";
+import { Link } from "react-router-dom";
 import LoginForm from './LoginForm';
 import LandingNavbar from './LandingNavbar';
 
