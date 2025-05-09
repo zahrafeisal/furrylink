@@ -351,7 +351,7 @@ function UserProfile({ fetchUser }) {
                     </p>
                 ) : (
                     petsAdded.map((pet) => (
-                    <div key={pet.id} className='homeCard' style={{width: '80rem', height: '15rem'}}>
+                    <div key={pet.id} className='homeCard' style={{width: '40rem', height: '15rem'}}>
                         <div className='cardImg'>
                             <img src={`https://furrylink-backend.onrender.com/uploads/${pet.image_filename}`} alt={pet.breed} />
                         </div>

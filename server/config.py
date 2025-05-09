@@ -19,9 +19,7 @@ CORS(
     methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Content-Type", "Accept"],
     origins=[
-            'https://furrylink-frontend.vercel.app'
-            'http://localhost:3000',                
-            'http://127.0.0.1:3000',               
+            'https://furrylink-frontend.vercel.app'            
         ]
     )
 
