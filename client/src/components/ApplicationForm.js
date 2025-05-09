@@ -8,6 +8,7 @@ import Navbar from "./Navbar";
 
 const ApplicationForm = ({ currentUser }) => {
     const API_BASE = process.env.REACT_APP_API_URL;
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -55,10 +56,9 @@ const ApplicationForm = ({ currentUser }) => {
             })
             .then((response) => {
                 if (response.ok) {
+                    setErrorMessage(null);
                     resetForm()
                     return response.json()
-                } else {
-                    throw new Error("Problem posting application")
                 }
             })
             .then((application) => {
@@ -66,7 +66,7 @@ const ApplicationForm = ({ currentUser }) => {
                 console.log(application)
             })
             .catch((error) => {
-                alert(error.message)
+                setErrorMessage(error.message)
             })
         }
     });
@@ -225,7 +225,7 @@ const ApplicationForm = ({ currentUser }) => {
                       }}
                     />
                     {formik.touched.description && formik.errors.description ? (  
-                        <div style={{ color: 'red' }}>{formik.errors.description}</div>  
+                        <div style={{ color: 'red', paddingTop: '3px', fontSize: '.9rem' }}>{formik.errors.description}</div>  
                     ) : null}  
                 </div>
                 <input 
@@ -236,6 +236,9 @@ const ApplicationForm = ({ currentUser }) => {
                     marginTop: '12rem'
                   }}
                 />  
+                {errorMessage && (
+                    <div style={{ color: 'red', paddingTop: '10px', paddingBottom: '10px' }}>{errorMessage}</div>
+                )}
             </form>
         </div>
         </>

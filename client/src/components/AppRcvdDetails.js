@@ -10,6 +10,7 @@ function AppRcvdDetails({ user }) {
 
     // Initialize state with the application's current data
     const [application, setApplication] = useState(applicationData);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     if (!application) {
         return <p>No application data available.</p>;
@@ -26,9 +27,14 @@ function AppRcvdDetails({ user }) {
         })
         .then((response) => {
             if (response.ok) {
+                setErrorMessage(null);
                 return response.json();
-            } else {
-                throw new Error("Failed to update application status.");
+            } else if (response.status === 404) {
+                setErrorMessage("Application not found.");
+            } else if (response.status === 401) {
+                setErrorMessage("Not authorized.")
+            } else if (response.status === 400) {
+                setErrorMessage("Invalid status.")
             }
         })
         .then((updatedApplication) => {
@@ -36,7 +42,7 @@ function AppRcvdDetails({ user }) {
             setApplication(updatedApplication);
         })
         .catch((error) => {
-            alert(error.message);
+            setErrorMessage(error.message);
         });
     }
 
@@ -95,6 +101,9 @@ function AppRcvdDetails({ user }) {
                             >
                                 Reject
                             </button>
+                            {errorMessage && (
+                                <div style={{ color: 'red', paddingTop: '10px', paddingBottom: '10px' }}>{errorMessage}</div>
+                            )}
                         </div>
                         </>
                     )}

@@ -1,11 +1,12 @@
 import { useFormik } from "formik";  
 import * as Yup from "yup";  
-import React, { useEffect } from "react";  
+import React, { useEffect, useState } from "react";  
 import { useNavigate } from "react-router";
 import Navbar from "./Navbar";
 
 function AddPet({ user }) { 
     const API_BASE = process.env.REACT_APP_API_URL;
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const navigate = useNavigate();
     const MAX_FILE_SIZE = 16 * 1024 * 1024; 
@@ -52,18 +53,16 @@ function AddPet({ user }) {
             .then((response) => {
                 if (response.ok) {
                     resetForm();
-                    alert("Pet added successfully")
+                    setErrorMessage(null);
                     navigate("/home")
                     return response.json();
-                } else {
-                    throw new Error("Unable to add pet")
                 }
             })
             .then((pet) => {
                 console.log(pet.breed)
             })
             .catch((error) => {
-                alert(error.message)
+                setErrorMessage(error.message)
             })
         }  
     });  
@@ -128,7 +127,7 @@ function AddPet({ user }) {
                         placeholder="Eg; Dog, Cat"
                     />  
                     {formik.touched.animalType && formik.errors.animalType ? (  
-                        <div style={{ color: 'red' }}>{formik.errors.animalType}</div>  
+                        <div style={{ color: 'red', paddingTop: '3px', fontSize: '.9rem' }}>{formik.errors.animalType}</div>  
                     ) : null}  
                 </div>  
                 <div className='col-md-6'>  
@@ -144,7 +143,7 @@ function AddPet({ user }) {
                         placeholder="Eg; German Shepherd"
                     />  
                     {formik.touched.breed && formik.errors.breed ? (  
-                        <div style={{ color: 'red' }}>{formik.errors.breed}</div>  
+                        <div style={{ color: 'red', paddingTop: '3px', fontSize: '.9rem' }}>{formik.errors.breed}</div>  
                     ) : null}  
                 </div>  
                 <div className='col-md-6'>  
@@ -162,7 +161,7 @@ function AddPet({ user }) {
                         color: '#999'
                     }}>Indicate in years.</div>
                     {formik.touched.age && formik.errors.age ? (  
-                        <div style={{ color: 'red' }}>{formik.errors.age}</div>  
+                        <div style={{ color: 'red', paddingTop: '3px', fontSize: '.9rem' }}>{formik.errors.age}</div>  
                     ) : null}  
                 </div>  
                 <div className='col-md-6'>  
@@ -177,7 +176,7 @@ function AddPet({ user }) {
                         size={30}  
                     />  
                     {formik.touched.price && formik.errors.price ? (  
-                        <div style={{ color: 'red' }}>{formik.errors.price}</div>  
+                        <div style={{ color: 'red', paddingTop: '3px', fontSize: '.9rem' }}>{formik.errors.price}</div>  
                     ) : null}  
                 </div>  
                 <div className='col-12'>  
@@ -194,7 +193,7 @@ function AddPet({ user }) {
                         }}
                     />  
                     {formik.touched.image_filename && formik.errors.image_filename ? (  
-                        <div style={{ color: 'red' }}>{formik.errors.image_filename}</div>  
+                        <div style={{ color: 'red', paddingTop: '3px', fontSize: '.9rem' }}>{formik.errors.image_filename}</div>  
                     ) : null}  
                 </div>  
                 <input 
@@ -202,6 +201,9 @@ function AddPet({ user }) {
                   value="Add pet" 
                   className='signUpSubmit col-md-4 btn btn-primary'
                 />  
+                {errorMessage && (
+                    <div style={{ color: 'red', paddingTop: '10px', paddingBottom: '10px' }}>{errorMessage}</div>
+                )}
             </form>  
         </div>  
         </>

@@ -7,6 +7,7 @@ function ApplicationsReceived({ user }) {
 
     const navigate = useNavigate();
     const [allApplications, setAllApplications] = useState([]);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const fetchApps = () => {
         fetch(`${API_BASE}/applications`, {
@@ -14,16 +15,15 @@ function ApplicationsReceived({ user }) {
         })
         .then((response) => {
             if (response.ok) {
+                setErrorMessage(null);
                 return response.json()
-            } else {
-                throw new Error("No applications found")
             }
         })
         .then((applications) => {
             setAllApplications(applications)
         })
         .catch((error) => {
-            alert(error.message)
+            setErrorMessage(error.message)
         })
     }
 
@@ -94,6 +94,9 @@ function ApplicationsReceived({ user }) {
                         </div>
                     </div>
                 ))
+            )}
+            {errorMessage && (
+                <div style={{ color: 'red', paddingTop: '10px', paddingBottom: '10px' }}>{errorMessage}</div>
             )}
         </div>
         </>

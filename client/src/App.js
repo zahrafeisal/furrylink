@@ -68,13 +68,12 @@ function App() {
             if (response.ok) {
                 return response.json();
             }
-            throw new Error("Failed to fetch pets");
         })
         .then((pets) => {
             setPets(pets);
         })
         .catch((error) => {
-            alert(error.message);
+            console.log(error.message);
         });
     }, []);
 

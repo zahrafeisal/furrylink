@@ -1,7 +1,7 @@
 // WORKING!
 
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router";
 
@@ -9,6 +9,7 @@ const LoginForm = ({ onLogin }) => {
     const API_BASE = process.env.REACT_APP_API_URL;
 
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const validationSchema = Yup.object({
         email: Yup.string()
@@ -40,17 +41,20 @@ const LoginForm = ({ onLogin }) => {
             .then((response) => {
                 if (response.ok) {
                     resetForm();   // clear input field
+                    setErrorMessage(null);
                     navigate("/home")    // navigate to Home
                     return response.json();
-                } else {
-                    alert("Incorrect username or password.")
+                } else if (response.status === 401) {
+                    setErrorMessage("Incorrect password.")
+                } else if (response.status === 404) {
+                    setErrorMessage("User does not exist.")
                 }
             })
             .then((user) => {   // onLogin used here   
                 onLogin(user);    // set user in session 
             })
             .catch((error) => {
-                alert(error.message)
+                setErrorMessage(error.message)
             })
         }
     });
@@ -104,6 +108,9 @@ const LoginForm = ({ onLogin }) => {
                     /> 
                 </div>
             </form> 
+            {errorMessage && (
+                <div style={{ color: 'red', paddingTop: '10px' }}>{errorMessage}</div>
+            )}
             <p className='poppins-regular' style={{
                 paddingTop: "30px",
                 paddingBottom: "1px",

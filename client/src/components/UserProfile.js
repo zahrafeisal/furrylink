@@ -8,6 +8,7 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
 
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
     const petsAdded = user.pets_added;
     const [userDetails, setUserDetails] = useState({
         first_name: user.first_name,
@@ -54,7 +55,10 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
         })
         .then((response) => {
             if (response.ok) {
+                setErrorMessage(null);
                 return response.json();
+            } else if (response.status === 404) {
+                setErrorMessage("User not found.")
             }
         })
         .then((updatedUser) => {
@@ -64,12 +68,11 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
             setEditMode(false);
         })
         .catch((error) => {
-            alert(error.message)
+            setErrorMessage(error.message)
         })
     }
 
     function handlePetAdopted(id) {
-        // remove from db
         fetch(`${API_BASE}/pet/${id}`, {
             method: 'DELETE',
             credentials: 'include',
@@ -230,6 +233,9 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
                             Cancel
                         </button>
                     </div>
+                    {errorMessage && (
+                        <div style={{ color: 'red', paddingTop: '10px', paddingBottom: '10px' }}>{errorMessage}</div>
+                    )}
                 </div>
             ) : (
                 <div className="profileInfo">

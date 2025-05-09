@@ -1,12 +1,13 @@
 // allow users to add their reviews
 
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Navbar from "./Navbar";
 
 const ReviewForm = ({ user }) => {
     const API_BASE = process.env.REACT_APP_API_URL;
 
     const [newReview, setNewReview] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     function handleReviewChange(e) {
         setNewReview(e.target.value);
@@ -28,7 +29,7 @@ const ReviewForm = ({ user }) => {
         })
         .then((response) => {
             if (response.ok) {
-                alert('review added successfully');
+                setErrorMessage(null)
                 return response.json();
             }
         })
@@ -36,7 +37,7 @@ const ReviewForm = ({ user }) => {
             console.log(review);
         })
         .catch((error) => {
-            alert(error.message)
+            setErrorMessage(error.message)
         })
     }
 
@@ -122,6 +123,9 @@ const ReviewForm = ({ user }) => {
             />
             </div>
         </form>
+        {errorMessage && (
+            <div style={{ color: 'red', paddingTop: '10px', paddingBottom: '10px' }}>{errorMessage}</div>
+        )}
         </div>
         </>
     )

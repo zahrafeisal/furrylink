@@ -10,6 +10,7 @@ const SignupForm = ({ onSignUp }) => {
     const API_BASE = process.env.REACT_APP_API_URL;
 
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState(null);
     
     const [isAnimalShelter, setIsAnimalShelter] = useState(false); // determine user type  
 
@@ -64,7 +65,6 @@ const SignupForm = ({ onSignUp }) => {
                 animalShelter: values.animalShelter === 'yes', // Converts 'yes'/'no' to true/false  
             };  
             console.log(data);  
-            // Send to your API database  
             fetch(`${API_BASE}/users`, {
                 method: 'POST',
                 credentials: 'include',
@@ -76,20 +76,20 @@ const SignupForm = ({ onSignUp }) => {
             })
             .then((response) => {
                 if (response.ok) {
-                    alert("Account created successfully!");
+                    resetForm();  
+                    setErrorMessage(null);
                     navigate("/home");
                     return response.json();
-                } else {
-                    alert("User already exists.");
+                } else if (response.status === 400) {
+                    setErrorMessage("Email already in use.");
                 }
             })
             .then((user) => {
                 onSignUp(user);
             })
             .catch((error) => {
-                alert(error.message)
+                setErrorMessage(error.message)
             })
-            resetForm();  
         }  
     });  
 
@@ -279,6 +279,9 @@ const SignupForm = ({ onSignUp }) => {
                         Sign up
                     </button>
                 </div>
+                {errorMessage && (
+                    <div style={{ color: 'red', paddingTop: '10px', paddingBottom: '10px' }}>{errorMessage}</div>
+                )}
                 <small style={{fontSize: '.8rem'}}>By creating an account you agree to our Terms and Conditions.</small>
             </form>  
             <p 
