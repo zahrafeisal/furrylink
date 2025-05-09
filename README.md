@@ -4,14 +4,14 @@
 This platform aims to provide a streamlined alternative to the traditional in-person adoption process, allowing users to apply for adoption of their dream pet and receive prompt feedback. Animal shelters and rescues as well as ordinary users have an opportunity to expose pets to their compatible owners conveniently.
 
 ## Table of Contents
-1. [Deployment](#🔗-deployment)
-2. [Key Features](#🗝️-key-features)
+1. [Deployment](#deployment)
+2. [Key Features](#key-features)
 3. [Folder Structure](#📂-folder-structure)
 4. [Technologies Used](#⚙️-technologies-used)
 5. [Installation & Setup](#🛠️-installation--setup)
 
 
-## 🔗 Deployment
+## 🔗 Deployment {#deployment}
 This application is live at [Furrylink](https://furrylink-frontend.vercel.app/).
 
 ### Frontend
@@ -23,7 +23,7 @@ The backend is deployed using Render and PostgreSQL.<br />
 [Backend GitHub Repository](https://github.com/zahrafeisal/furrylink-backend)
 
 
-## 🗝️ Key Features
+## 🗝️ Key Features {#key-features}
 <ul>
 <li><strong>User Authentication - </strong>ensures secure log in and sign up as well as password protection through hashing using the Flask-Bcrypt library.</li>
 <li><strong>Session-based User Management - </strong>the unique user id is stored in the session cookies to keep users logged into the application until they choose to log out. Prevents unauthorized users from accessing certain routes unless logged in.</li>
