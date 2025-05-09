@@ -1,13 +1,15 @@
 // WORKING!
 
-import React, { useState } from 'react';  
+import React, { useContext, useState } from 'react';  
 import { useFormik } from 'formik';  
 import * as Yup from 'yup';  
 import "../App.css";  
 import { Link, useNavigate } from 'react-router';
+import { UserContext } from './UserContext';
 
-const SignupForm = ({ onSignUp }) => { 
+const SignupForm = () => { 
     const API_BASE = process.env.REACT_APP_API_URL;
+    const { setCurrentUser } = useContext(UserContext);
 
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState(null);
@@ -85,7 +87,7 @@ const SignupForm = ({ onSignUp }) => {
                 }
             })
             .then((user) => {
-                onSignUp(user);
+                setCurrentUser(user);
             })
             .catch((error) => {
                 setErrorMessage(error.message)

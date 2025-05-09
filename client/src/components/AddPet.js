@@ -1,12 +1,14 @@
 import { useFormik } from "formik";  
 import * as Yup from "yup";  
-import React, { useEffect, useState } from "react";  
+import React, { useContext, useEffect, useState } from "react";  
 import { useNavigate } from "react-router";
 import Navbar from "./Navbar";
+import { UserContext } from "./UserContext";
 
-function AddPet({ user }) { 
+function AddPet({ fetchPets }) { 
     const API_BASE = process.env.REACT_APP_API_URL;
     const [errorMessage, setErrorMessage] = useState(null);
+    const { currentUser } = useContext(UserContext);
 
     const navigate = useNavigate();
     const MAX_FILE_SIZE = 16 * 1024 * 1024; 
@@ -54,12 +56,13 @@ function AddPet({ user }) {
                 if (response.ok) {
                     resetForm();
                     setErrorMessage(null);
+                    fetchPets();
                     navigate("/home")
                     return response.json();
                 }
             })
             .then((pet) => {
-                console.log(pet.breed)
+                console.log(pet)
             })
             .catch((error) => {
                 setErrorMessage(error.message)
@@ -68,11 +71,11 @@ function AddPet({ user }) {
     });  
 
     useEffect(() => {  
-        if (user) {  
-            formik.setFieldValue('email', user.email); // Update email when user changes  
-            formik.setFieldValue('telephone', user.telephone); // Update tel when user changes  
+        if (currentUser) {  
+            formik.setFieldValue('email', currentUser.email); // Update email when user changes  
+            formik.setFieldValue('telephone', currentUser.telephone); // Update tel when user changes  
         }  
-    }, [user]);  
+    }, [currentUser]);  
 
     const handleFileChange = (event) => {     // Custom since it doesnt work w formik
         const file = event.currentTarget.files[0];  
@@ -81,7 +84,7 @@ function AddPet({ user }) {
 
     return (  
         <>
-        <Navbar user={user} />
+        <Navbar user={currentUser} />
         <div className="addPet">  
             <div className='signUpHeader'>
                 <h2 className='dancing-script-landingPageh1'><strong>Looking to give your pet a new home?</strong></h2>  

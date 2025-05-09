@@ -1,8 +1,10 @@
-import React, { use, useState } from "react";
+import React, { use, useContext, useState } from "react";
 import { useLocation } from "react-router";
 import Navbar from "./Navbar";
+import { UserContext } from "./UserContext";
 
-function AppRcvdDetails({ user }) {
+function AppRcvdDetails() {
+    const { currentUser } = useContext(UserContext);
     const API_BASE = process.env.REACT_APP_API_URL;
 
     const location = useLocation();
@@ -51,7 +53,7 @@ function AppRcvdDetails({ user }) {
 
     return (
         <>
-        <Navbar user={user} />
+        <Navbar user={currentUser} />
         <div className="appDetails poppins-regular">
             <h2>Application Details</h2>
             <div className="card"

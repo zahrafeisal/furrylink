@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';  
 import Navbar from './Navbar';
+import { UserContext } from './UserContext';
 
-function Home({ pets, user }) {  
+function Home() {  
+    const { pets, currentUser } = useContext(UserContext);
     const [allPets, setAllPets] = useState(pets);  
     const [filteredPets, setFilteredPets] = useState([]);
     const [userSearch, setUserSearch] = useState("");
@@ -36,7 +38,7 @@ function Home({ pets, user }) {
     }
     return (
         <>
-            <Navbar user={user} />
+            <Navbar user={currentUser} />
             <div className='homeHeader dancing-script-landingPageh1'>
                 <h2>Explore</h2>
                 <form onSubmit={handleSearchSubmit} className='homeSearch poppins-regular'>
@@ -97,7 +99,7 @@ function Home({ pets, user }) {
                                             <small style={{color: 'gray'}}>Registered Shelter<i style={{marginLeft: '1px'}} className="fa-regular fa-registered"></i></small>
                                         ): null}
                                     </div>
-                                    {!(user.animal_shelter) ? (
+                                    {!(currentUser.animal_shelter || currentUser.id === pet.user_id) ? (
                                         <div className='applyLink'>
                                             <small onClick={() => handleAdoptClick(pet)}>Apply now</small>
                                         </div>

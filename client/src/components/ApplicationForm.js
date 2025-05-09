@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useFormik } from 'formik';  
 import * as Yup from 'yup';  
 import Navbar from "./Navbar";
+import { UserContext } from "./UserContext";
 
 
-const ApplicationForm = ({ currentUser }) => {
+const ApplicationForm = () => {
     const API_BASE = process.env.REACT_APP_API_URL;
     const [errorMessage, setErrorMessage] = useState(null);
+    const { currentUser } = useContext(UserContext);
 
     const navigate = useNavigate();
     const location = useLocation();

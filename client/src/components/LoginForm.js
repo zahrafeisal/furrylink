@@ -1,13 +1,14 @@
 // WORKING!
 
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router";
+import { UserContext } from './UserContext';
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = () => {
+    const { setCurrentUser } = useContext(UserContext);
     const API_BASE = process.env.REACT_APP_API_URL;
-
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState(null);
 
@@ -51,7 +52,7 @@ const LoginForm = ({ onLogin }) => {
                 }
             })
             .then((user) => {   // onLogin used here   
-                onLogin(user);    // set user in session 
+                setCurrentUser(user);    // set user in session 
             })
             .catch((error) => {
                 setErrorMessage(error.message)

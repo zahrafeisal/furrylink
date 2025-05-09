@@ -117,14 +117,13 @@
   margin-right: 5px;
 }
 
-.adverts {
+.aboutSections {
   margin-top: 110px;
   margin-left: 50px;
   margin-bottom: 100px;
-  display: block !important;
 }
 
-.advert {
+.aboutSection {
   display: flex;
   margin-bottom: 50px;
   width: 60%;
@@ -135,7 +134,7 @@
 
 }
 
-.advert img {
+.aboutSection img {
   width: 30%;
   height: 30%;
   border-radius: 20px; /* Rounds the corners for a softer look */

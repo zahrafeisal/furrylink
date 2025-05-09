@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import LoginForm from './LoginForm';
 import LandingNavbar from './LandingNavbar';
 
-function LandingPage({ onLogin }) {
+function LandingPage() {
     return (
         <>
         <LandingNavbar />
@@ -16,7 +16,7 @@ function LandingPage({ onLogin }) {
                 left: '800px',
                 top: '10%'
             }}>
-                <LoginForm onLogin={onLogin} />
+                <LoginForm />
             </div>
         </div>
         <div className='landingGallery'>
@@ -24,7 +24,7 @@ function LandingPage({ onLogin }) {
             <img style={{borderRadius: '60px 30px'}} src='https://image.petmd.com/files/inline-images/silver-persian-cat.jpg?VersionId=lA9jJUgugdFTclEJMdH4cC7LQuNgmacR' alt='Persian Cat'/>
             <img style={{borderRadius: '10px 60px 30px'}} src='https://media.istockphoto.com/id/1347214341/photo/young-woman-with-adorable-rabbit-on-floor-indoors-lovely-pet.jpg?s=612x612&w=0&k=20&c=PBf2GMTfBwdznJaXNkH6QL8LYiXsJn2NhfxX5qkTzDU=' alt='Rabbit'/>
         </div>
-        <div className='adverts poppins-regular'>
+        <div className='aboutSections poppins-regular'>
             <div style={{
                 textAlign: 'center',
                 paddingBottom: '40px'
@@ -32,7 +32,7 @@ function LandingPage({ onLogin }) {
                 <h3>We have our pets' best interests at heart</h3>
                 <p>And yours too! ;)</p>
             </div>
-            <div className='advert'>
+            <div className='aboutSection'>
                 <img src='https://b1157417.smushcdn.com/1157417/wp-content/uploads/family-outdoors-backyard-playing-dog-offleash-11-825x549.jpg?lossy=1&strip=1&webp=0' alt='Dog' />
                 <div
                   style={{
@@ -48,7 +48,7 @@ function LandingPage({ onLogin }) {
             </div>
             <div style={{
                     marginLeft: '550px'
-                }} className='advert'>
+                }} className='aboutSection'>
                 <img src='https://www.jadpo.co.uk/cdn-cgi/image/fit=cover,format=auto,width=768,height=750/https://images.ctfassets.net/4cuokmrwdiqv/6JL03TiD3IqxvvPacemOqs/748427564b0778b918bef7942a4b5b97/hub-hero-image-desktop.jpg' alt='Dog' />
                 <div
                   style={{
@@ -63,7 +63,7 @@ function LandingPage({ onLogin }) {
                     </p>
                 </div>
             </div>
-            <div className='advert'>
+            <div className='aboutSection'>
                 <img src='https://petsmartcharities.ca/sites/default/files/2024-03/pci-web_find-a-pet-hero_2024_CA.webp' alt='Cat'/>
                 <div
                   style={{
@@ -109,7 +109,7 @@ function LandingPage({ onLogin }) {
                   style={{
                     marginLeft: '550px'
                   }}
-                  className='advert'
+                  className='aboutSection'
                 >
                     <img src='https://www.nvadg.org/wp-content/uploads/2020/11/nvadg_home_intro-min.jpg' alt='Rescue' />
                     <div
@@ -145,7 +145,7 @@ function LandingPage({ onLogin }) {
                     </ul>
                 </div>
             </div>
-            <small><i style={{paddingRight: '5px'}} className="fa-regular fa-copyright"></i>zahrafeisal3@gmail.com. All rights reserved.</small>
+            <small><i style={{paddingRight: '1px'}} className="fa-regular fa-copyright"></i>2025 Furrylink. All rights reserved.</small>
         </div>
         </>
     );

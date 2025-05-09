@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router';
 import Navbar from './Navbar';
+import { UserContext } from './UserContext';
 
-function ApplicationsReceived({ user }) {
+function ApplicationsReceived() {
     const API_BASE = process.env.REACT_APP_API_URL;
 
     const navigate = useNavigate();
     const [allApplications, setAllApplications] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
+    const { currentUser } = useContext(UserContext);
 
     const fetchApps = () => {
         fetch(`${API_BASE}/applications`, {
@@ -30,7 +32,7 @@ function ApplicationsReceived({ user }) {
     useEffect(() => {fetchApps()}, [])
 
     // Get IDs of user's posted pets
-    const myPetIds = user.pets_added ? user.pets_added.map(pet => pet.id) : [];
+    const myPetIds = currentUser.pets_added ? currentUser.pets_added.map(pet => pet.id) : [];
     const appsReceived = allApplications.filter(app => myPetIds.includes(app.pet_id))
 
     function handleApplicationClick(app) {
@@ -41,8 +43,8 @@ function ApplicationsReceived({ user }) {
 
     return (
         <>
-        <Navbar user={user} />
-        {!user.animal_shelter ? (
+        <Navbar user={currentUser} />
+        {!currentUser.animal_shelter ? (
             <nav className='logOutNav poppins-regular' style={{paddingLeft: '30px', paddingTop: '20px'}} >
                 <Link to={'/pet-applications'} style={{color: 'black'}} className='btn btn-outline-light'>Received</Link>
                 <Link to={'/sent-applications'} style={{width: '100px'}} className='btn btn-primary' >Sent</Link>

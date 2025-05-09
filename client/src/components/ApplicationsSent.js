@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router'
 import Navbar from './Navbar'
+import { UserContext } from './UserContext'
 
-function ApplicationsSent({ currentUser }) {
+function ApplicationsSent() {
+    const { currentUser } = useContext(UserContext);
     const navigate = useNavigate()
     
     // Access applications directly from user

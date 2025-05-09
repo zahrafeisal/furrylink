@@ -116,7 +116,7 @@ function About() {
                     </ul>
                 </div>
             </div>
-            <small><i style={{paddingRight: '5px'}} className="fa-regular fa-copyright"></i>zahrafeisal3@gmail.com. All rights reserved.</small>
+            <small><i style={{paddingRight: '1px'}} className="fa-regular fa-copyright"></i>2025 Furrylink. All rights reserved.</small>
         </div>
         </>
     )

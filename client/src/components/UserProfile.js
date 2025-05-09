@@ -1,37 +1,39 @@
 import '../App.css'
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from './Navbar';
+import { UserContext } from './UserContext';
 
-function UserProfile({ user, setUpdatedUser, fetchUser }) {
+function UserProfile({ fetchUser }) {
     const API_BASE = process.env.REACT_APP_API_URL;
+    const { currentUser, setCurrentUser } = useContext(UserContext);
 
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    const petsAdded = user.pets_added;
+    const petsAdded = currentUser.pets_added;
     const [userDetails, setUserDetails] = useState({
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        telephone: user.telephone,
-        organization_name: user.organization_name
+        first_name: currentUser.first_name,
+        last_name: currentUser.last_name,
+        email: currentUser.email,
+        telephone: currentUser.telephone,
+        organization_name: currentUser.organization_name
     })
 
     useEffect(() => {  
         setUserDetails({  
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email,  
-            telephone: user.telephone,
-            organization_name: user.organization_name
+            first_name: currentUser.first_name,
+            last_name: currentUser.last_name,
+            email: currentUser.email,  
+            telephone: currentUser.telephone,
+            organization_name: currentUser.organization_name
         });  
-    }, [user]); // Sync userDetails whenever user updates  
+    }, [currentUser]); // Sync userDetails whenever user updates  
 
     const isOrganization = !!userDetails.organization_name;
     
     function handleEdit() {
-        if (user.id) {
+        if (currentUser.id) {
             setEditMode(true);    // ensure other users can't edit ur profile, future profile search functionality
         }
     }
@@ -45,7 +47,7 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
     }
 
     function handleDeetsSave() {
-        fetch(`${API_BASE}/user/${user.id}`, {
+        fetch(`${API_BASE}/user/${currentUser.id}`, {
             method: "PATCH",
             credentials: 'include',
             headers: {
@@ -63,7 +65,7 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
         })
         .then((updatedUser) => {
             console.log(updatedUser);
-            setUpdatedUser(updatedUser);
+            setCurrentUser(updatedUser);
             fetchUser();
             setEditMode(false);
         })
@@ -82,12 +84,11 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
         })
         .then((response) => {
             if (response.ok) {
-                alert("Pet deleted successfully")
                 return response.json();
             }
         })
         .catch((error) => {
-            alert(error.message)
+            setErrorMessage(error.message)
         })
     }
 
@@ -102,13 +103,13 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
             }
         })
         .catch((error) => {
-            alert(error.message)
+            setErrorMessage(error.message)
         })
     }
 
     return (
         <>
-        <Navbar user={user} />
+        <Navbar user={currentUser} />
         <nav className='logOutNav poppins-regular'>
             <div
               style={{
@@ -343,14 +344,14 @@ function UserProfile({ user, setUpdatedUser, fetchUser }) {
                 {petsAdded.length === 0 ? (
                     <p 
                       style={{color: 'gray', fontSize: '20px', marginLeft: '44%'}} 
-                      className='tinos-regular'
+                      className='poppins-regular'
                     >
                         <i style={{paddingRight: '10px'}} className="fa-solid fa-circle-exclamation"></i>
                         No posts yet.
                     </p>
                 ) : (
                     petsAdded.map((pet) => (
-                    <div key={pet.id} className='homeCard' style={{width: '40rem', height: '15rem'}}>
+                    <div key={pet.id} className='homeCard' style={{width: '80rem', height: '15rem'}}>
                         <div className='cardImg'>
                             <img src={`https://furrylink-backend.onrender.com/uploads/${pet.image_filename}`} alt={pet.breed} />
                         </div>

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation } from "react-router";
 import Navbar from "./Navbar";
+import { UserContext } from "./UserContext";
 
-function AppSentDetails({ user }) {
+function AppSentDetails() {
     const location = useLocation()
     const application = location.state?.app
+    const { currentUser } = useContext(UserContext);
 
     if (!application) {
         return <p>No application data available.</p>;
@@ -12,7 +14,7 @@ function AppSentDetails({ user }) {
 
     return (
         <>
-        <Navbar user={user} />
+        <Navbar user={currentUser} />
         <div className="appDetails poppins-regular">
             <h2>Application Details</h2>
             <div className="card"

@@ -1,13 +1,15 @@
 // allow users to add their reviews
 
-import React, { use, useState } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "./Navbar";
+import { UserContext } from "./UserContext";
 
-const ReviewForm = ({ user }) => {
+const ReviewForm = () => {
     const API_BASE = process.env.REACT_APP_API_URL;
 
     const [newReview, setNewReview] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
+    const { currentUser } = useContext(UserContext);
 
     function handleReviewChange(e) {
         setNewReview(e.target.value);
@@ -43,7 +45,7 @@ const ReviewForm = ({ user }) => {
 
     return (
         <>
-        <Navbar user={user} />
+        <Navbar user={currentUser} />
         <div style={{marginTop: '100px'}} className="poppins-regular">
         <div className='aboutHeaders' style={{marginBottom: '50px' }}>
                 <h4 style={{ display: 'inline-block', margin: 0 }}>Contacts</h4>
