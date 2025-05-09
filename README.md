@@ -9,8 +9,6 @@ This platform aims to provide a streamlined alternative to the traditional in-pe
 3. [Folder Structure](#folder-structure)
 4. [Technologies Used](#technologies-used)
 5. [Installation & Setup](#installation--setup)
-6. 
-7. 
 
 
 ## Deployment
@@ -38,8 +36,6 @@ The backend is deployed using Render and PostgreSQL.<br />
 2. Animal shelters cannot apply for adoption of any pets and therefore do not have a 'Sent Applications' page. They can only access received applications
 </li>
 <li><strong>User Feedback - </strong>the platform enables users to leave a review of their experience which can be viewed by other users.</li>
-<li><strong></strong></li>
-<li><strong></strong></li>
 </ul>
 
 
@@ -104,12 +100,94 @@ CSS
 
 ### Backend
 Flask
+PostgreSQL
+SQLAlchemy
 
 
 ## Installation & Setup
+For local installation and setup:
 
-### Requirements
+### Prerequisites
 
 ### Frontend
+<ul>
+<li>Node.js 16 or higher</li>
+<li>npm or yarn</li>
+</ul>
 
 ### Backend
+<ul>
+<li>Python 3.8</li>
+<li>PostgresSQL</li>
+</ul>
+
+### Installation
+Clone the repository
+```code
+$ git clone git@github.com:zahrafeisal/furrylink.git
+```
+
+### Frontend Setup
+Navigate to the client directory
+```code
+$ cd client
+```
+Run this command to install dependencies
+```code
+$ npm install
+```
+Create a <strong>.env</strong> file in the client directory to set up environment variables. Copy and paste the following:
+```code
+REACT_APP_API_URL='https://furrylink-backend.onrender.com'
+```
+This connects the client to the deployed API on Render for fetch requests.<br />
+<br />
+Run the application on the browser using the command:
+```code
+$ npm start
+```
+
+### Backend Setup
+Create a PostgreSQL account with Render.<br />
+
+Navigate to the server directory
+```code
+$ cd server
+```
+Run to install dependencies
+```code
+$ pipenv install
+```
+Activate your virtual environment
+```code
+$ pipenv shell
+```
+Create a <strong>.env</strong> file in the server directory to set up environment variables. Copy and paste the following:
+```code
+SECRET_KEY="a0c95b0e194847ea836d07d76304a2bb9c004f1eedfa007f"
+DATABASE_URI="postgresql://<USERNAME>:<PASSWORD>@dpg-d0e9mu95pdvs73atde7g-a.oregon-postgres.render.com/furrylink_db"
+```
+The secret key is used for session management. The database URI connects to the remote PostgreSQL database.<br />
+Replace USERNAME and PASSWORD with your actualvariables obtained from Render.
+
+In your terminal, run:
+```code
+$ flask db init
+$ flask db migrate
+$ flask db upgrade
+```
+to set up the database schema with the tables defined in <strong>models.py</strong>.
+
+To seed the database, run:
+```code
+python seed.py
+```
+Ensure you are in the server directory and run the following to configure your flask environment:
+```code
+$ export FLASK_APP=app.py
+$ export FLASK_RUN_PORT=5555
+```
+Then run the following command to start your server:
+```code
+$ flask run
+```
