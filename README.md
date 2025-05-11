@@ -50,11 +50,7 @@ From the root directory
 ├── client
 │   ├── package-lock.json
 │   ├── package.json
-│   ├── public
-│   │   ├── favicon.ico
-│   │   ├── index.html
-│   │   ├── manifest.json
-│   │   └── robots.txt
+│   ├── public/
 │   └── src
 │       ├── App.css
 │       ├── App.js
@@ -77,15 +73,22 @@ From the root directory
 │       │   ├── Reviews.js
 │       │   ├── SignUp.js
 │       │   ├── Unauthorized.js
+│       │   ├── UserContext.js
 │       │   └── UserProfile.js
 │       ├── index.css
 │       ├── index.js
 │       ├── reportWebVitals.js
 │       └── setupTests.js
 └── server
+    ├── __pycache__/
     ├── app.py
     ├── config.py
-    ├── migrations/
+    ├── migrations
+    │   ├── README
+    │   ├── alembic.ini
+    │   ├── env.py
+    │   ├── script.py.mako
+    │   └── versions/
     ├── models.py
     ├── requirements.txt
     ├── seed.py
