@@ -155,11 +155,11 @@ class Pets(Resource):
     def get(self):
         # view all pets
         pets = []  
-        base_url = "/uploads/"
+        # base_url = "/uploads"
 
         for pet in Pet.query.all():
             pet_dict = pet.to_dict()
-            pet_dict['image_filename'] = base_url + pet_dict['image_filename']  # Ensure full path is set  
+            # pet_dict['image_filename'] = base_url + pet_dict['image_filename']  # Ensure full path is set  
             pets.append(pet_dict)
 
         if pets:
@@ -234,7 +234,7 @@ class Pets(Resource):
 
 class UploadImages(Resource):
     def get(self, filename):
-        return send_from_directory('uploads', filename)
+        return send_from_directory('/opt/render/project/src/uploads', filename)
 
 
 class PetByID(Resource):  
@@ -396,6 +396,20 @@ class ApplicationByID(Resource):
         application.status = new_status  
         db.session.commit()  
         return make_response(application.to_dict(), 200)
+    
+
+@app.route('/check-uploads-directory')
+def check_uploads_directory():
+    uploads_dir = os.path.join(app.root_path, 'uploads')
+    if os.path.exists(uploads_dir):
+        files = os.listdir(uploads_dir)
+        return jsonify({
+            'exists': True,
+            'files': files,
+            'path': uploads_dir
+        })
+    else:
+        return jsonify({ 'exists': False, 'message': 'Uploads directory does not exist.' })
 
 
 api.add_resource(Login, '/login')   # done
