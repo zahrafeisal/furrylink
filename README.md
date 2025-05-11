@@ -98,12 +98,12 @@ From the root directory
 ## ⚙️ Technologies Used
 
 ### Frontend
-React.js
+React<br/>
 CSS
 
 ### Backend
-Flask
-PostgreSQL
+Flask<br/>
+PostgreSQL<br/>
 SQLAlchemy
 
 
